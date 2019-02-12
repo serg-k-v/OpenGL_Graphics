@@ -111,7 +111,7 @@ def main():
         glutIdleFunc(DrawGLScene)
         glutKeyboardFunc(keyPressed)
         InitGL(640, 480)
-        glutMainLoop()
+        # glutMainLoop()
 
 if __name__ == "__main__":
         main()
