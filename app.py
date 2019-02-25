@@ -2,7 +2,7 @@ import sys  # sys нужен для передачи argv в QApplication
 
 from PyQt5 import QtWidgets
 
-import design  # Это наш конвертированный файл дизайна
+from qt_view import design # Это наш конвертированный файл дизайна
 
 
 class MainWindow(QtWidgets.QMainWindow, design.Ui_MainWindow):
@@ -24,7 +24,3 @@ def main():
 
 if __name__ == '__main__':  # Если мы запускаем файл напрямую, а не импортируем
     main()  # то запускаем функцию main()
-
-
-
-

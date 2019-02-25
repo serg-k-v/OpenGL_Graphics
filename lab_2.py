@@ -2,7 +2,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
-from gl_implemet.gl_primitives import draw_point, draw_line
+import gl_primitives as prm
 
 width, height = 640,480
 
@@ -10,22 +10,6 @@ def draw() :
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
 
-
-    # draw_point(10, [.1, .1, .5], [100, 200, 0], False)
-    # prm.draw_point(10, [.1, .1, .5], [100, 200, 0], False)
-    # prm.draw_point(20, [.1, .17, .5], [50, 100, 0], False)
-    # prm.draw_point(40, [.3, .5, 0.5], [150, 400, 0], True)
-    #
-    draw_line(5., [1., .5, 1.], [50, 50, 0], [300, 100, 0], False)
-    # prm.draw_line(5, [1., .5, 1.], [50, 50, 0], [300, 100, 0], False)
-    # prm.draw_line(5, [1., 1., 1.], [300, 50, 0], [500, 400, 0], False)
-    #
-    # prm.draw_line_strip(20, [1, 0, 0], [50, 200, 0], [200, 350, 0], False,
-    # [250, 550,0], [400, 380,0], [150, 60, 0])
-    #
-    # prm.draw_line_loop(20, [0, 1, 0.9], [0, 220, 0], [180, 380, 0], False,
-    # [290, 590,0], [420, 390,0], [190, 130, 0])
-    #
     # prm.draw_triangle(15, [0.2, 0.3, 0.8], [[500, 500, 0],[450, 20, 0],
     # [600, 20, 0]], False, 'fill')
     # prm.draw_triangle_fan(50, [.4, 0.2, 0.7], [[420, 600, 0],[30, 510, 0],
@@ -37,9 +21,35 @@ def draw() :
     # [600, 20, 0],[450, 20, 0]], False, 'line')
     # prm.draw_quad_strip(30, [0.9, 0.5, 0.2], [[500, 500, 0],[460, 500, 0],
     # [600, 20, 0],[280, 280, 0],[450, 20, 0], [40, 70, 0]], False, 'line')
-    #
-    # prm.draw_polygon(15, [0.0, 0.4, 0.2], [[500, 500, 0],[560, 420, 0],
-    # [510, 380, 0],[470, 280, 0],[400, 210, 0], [290, 310, 0]], False, 'line')
+
+    coord = [[50, 300, 0],[150, 250, 0],[400, 550, 0],[450,320,0],
+    [100, 100, 0],[200, 280, 0], [100, 50, 0]]
+
+
+    # parametr = GL_SCISSOR_TEST
+    parametr = GL_ALPHA_TEST
+    glEnable(parametr)
+    glAlphaFunc(GL_GREATER,0.5)
+    # prm.draw_polygon(15, [255, 0, 240], coord , False, 'fill')
+
+    # glScissor(200,200,100,80) # begin point, width and height
+    glBegin(GL_POLYGON)
+    glColor3d(0.1, 0, 0)
+    glVertex3d(50, 300, 0)
+    # glColor3d(0.8, 0.5, 0.1)
+    glVertex3d(150, 250, 0)
+    # glColor3d(0.2, 0.5, 0.7)
+    glVertex3d(400, 550, 0)
+    # glColor3d(0.4, 0.5, 0.9)
+    glVertex3d(450,320,0)
+    glColor3d(0.9, 0, 0)
+    glVertex3d(100, 100, 0)
+    # glColor3d(0.6, 0.8, 0.6)
+    glVertex3d(200, 280, 0)
+    # glColor3d(0.9, 0.5, 0.6)
+    glVertex3d(100, 50, 0)
+    glEnd()
+    glDisable(parametr);
 
     glutSwapBuffers()
 

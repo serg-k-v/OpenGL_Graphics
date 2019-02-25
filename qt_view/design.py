@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from MOGL import GLWidget
+from gl_implemet.MOGL import GLWidget
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -52,5 +52,3 @@ class Ui_MainWindow(object):
         self.comboBox.setItemText(7, _translate("MainWindow", "GL_QUADS"))
         self.comboBox.setItemText(8, _translate("MainWindow", "GL_QUAD_STRIP"))
         self.comboBox.setItemText(9, _translate("MainWindow", "GL_POLYGON"))
-
-
