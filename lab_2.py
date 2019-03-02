@@ -2,7 +2,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
-import gl_primitives as prm
+from gl_implement import gl_primitives as prm
 
 width, height = 640,480
 
@@ -25,28 +25,37 @@ def draw() :
     coord = [[50, 300, 0],[150, 250, 0],[400, 550, 0],[450,320,0],
     [100, 100, 0],[200, 280, 0], [100, 50, 0]]
 
+    choise = 'blend'
+    choise = 'alpha'
 
-    # parametr = GL_SCISSOR_TEST
-    parametr = GL_ALPHA_TEST
+    if choise == 'cat' :
+        parametr = GL_SCISSOR_TEST
+        glScissor(200,200,100,80) # begin point, width and height
+    elif choise == 'alpha' :
+        parametr = GL_ALPHA_TEST
+        glAlphaFunc(GL_GREATER,0.2)
+    elif choise == 'blend' :
+        parametr = GL_BLEND
+        sfactor = GL_SRC_ALPHA
+        dfactor = GL_ONE_MINUS_SRC_ALPHA
+        glBlendFunc(sfactor,sfactor) #???
+
     glEnable(parametr)
-    glAlphaFunc(GL_GREATER,0.5)
     # prm.draw_polygon(15, [255, 0, 240], coord , False, 'fill')
-
-    # glScissor(200,200,100,80) # begin point, width and height
     glBegin(GL_POLYGON)
-    glColor3d(0.1, 0, 0)
+    glColor4d(0.1, 0, 0, .4)
     glVertex3d(50, 300, 0)
-    # glColor3d(0.8, 0.5, 0.1)
+    # glColor4d(0.8, 0.5, 0.1)
     glVertex3d(150, 250, 0)
-    # glColor3d(0.2, 0.5, 0.7)
+    # glColor4d(0.2, 0.5, 0.7)
     glVertex3d(400, 550, 0)
-    # glColor3d(0.4, 0.5, 0.9)
+    glColor4d(0.4, 0.5, 0.9, .8)
     glVertex3d(450,320,0)
-    glColor3d(0.9, 0, 0)
+    glColor4d(0.9, 0, 0, .2)
     glVertex3d(100, 100, 0)
-    # glColor3d(0.6, 0.8, 0.6)
+    # glColor4d(0.6, 0.8, 0.6)
     glVertex3d(200, 280, 0)
-    # glColor3d(0.9, 0.5, 0.6)
+    glColor4d(0.9, 0.5, 0.6, .5)
     glVertex3d(100, 50, 0)
     glEnd()
     glDisable(parametr);
@@ -73,7 +82,7 @@ def Init_GL_Window(num_window, width, height) :
     glutDisplayFunc(draw)
     # glutIdleFunc(draw)
     glutReshapeFunc(refresh2d)
-    glClearColor(.26, .23, .51 , 1.0) # background color
+    glClearColor(.6, .2, .4 , 1.0) # background color
     glutMainLoop()
 
 def main() :

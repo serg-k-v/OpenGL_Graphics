@@ -3,7 +3,7 @@ from PyQt5.QtOpenGL import QGLWidget
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-from gl_implemet import gl_primitives as prm
+from gl_implement import gl_primitives as prm
 import numpy as np
 
 class GLWidget(QGLWidget):
