@@ -26,19 +26,19 @@ def draw() :
     [100, 100, 0],[200, 280, 0], [100, 50, 0]]
 
     choise = 'blend'
-    choise = 'alpha'
+    # choise = 'alpha'
 
     if choise == 'cat' :
         parametr = GL_SCISSOR_TEST
         glScissor(200,200,100,80) # begin point, width and height
     elif choise == 'alpha' :
         parametr = GL_ALPHA_TEST
-        glAlphaFunc(GL_GREATER,0.2)
+        glAlphaFunc(GL_GREATER,0.4)
     elif choise == 'blend' :
         parametr = GL_BLEND
         sfactor = GL_SRC_ALPHA
         dfactor = GL_ONE_MINUS_SRC_ALPHA
-        glBlendFunc(sfactor,sfactor) #???
+        glBlendFunc(sfactor,dfactor) #???
 
     glEnable(parametr)
     # prm.draw_polygon(15, [255, 0, 240], coord , False, 'fill')
