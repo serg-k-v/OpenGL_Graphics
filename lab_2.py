@@ -27,6 +27,7 @@ def draw() :
 
     choise = 'blend'
     # choise = 'alpha'
+    # choise = 'cat'
 
     if choise == 'cat' :
         parametr = GL_SCISSOR_TEST
@@ -41,23 +42,23 @@ def draw() :
         glBlendFunc(sfactor,dfactor) #???
 
     glEnable(parametr)
-    # prm.draw_polygon(15, [255, 0, 240], coord , False, 'fill')
-    glBegin(GL_POLYGON)
-    glColor4d(0.1, 0, 0, .4)
-    glVertex3d(50, 300, 0)
-    # glColor4d(0.8, 0.5, 0.1)
-    glVertex3d(150, 250, 0)
-    # glColor4d(0.2, 0.5, 0.7)
-    glVertex3d(400, 550, 0)
-    glColor4d(0.4, 0.5, 0.9, .8)
-    glVertex3d(450,320,0)
-    glColor4d(0.9, 0, 0, .2)
-    glVertex3d(100, 100, 0)
-    # glColor4d(0.6, 0.8, 0.6)
-    glVertex3d(200, 280, 0)
-    glColor4d(0.9, 0.5, 0.6, .5)
-    glVertex3d(100, 50, 0)
-    glEnd()
+    prm.draw_polygon(15, [255, 0, 240, 0.6], coord , False, 'fill')
+    # glBegin(GL_POLYGON)
+    # glColor4d(0.1, 0, 0, .4)
+    # glVertex3d(50, 300, 0)
+    # # glColor4d(0.8, 0.5, 0.1)
+    # glVertex3d(150, 250, 0)
+    # # glColor4d(0.2, 0.5, 0.7)
+    # glVertex3d(400, 550, 0)
+    # glColor4d(0.4, 0.5, 0.9, .8)
+    # glVertex3d(450,320,0)
+    # glColor4d(0.9, 0, 0, .2)
+    # glVertex3d(100, 100, 0)
+    # # glColor4d(0.6, 0.8, 0.6)
+    # glVertex3d(200, 280, 0)
+    # glColor4d(0.9, 0.5, 0.6, .5)
+    # glVertex3d(100, 50, 0)
+    # glEnd()
     glDisable(parametr);
 
     glutSwapBuffers()
