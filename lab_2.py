@@ -25,16 +25,16 @@ def draw() :
     coord = [[50, 300, 0],[150, 250, 0],[400, 550, 0],[450,320,0],
     [100, 100, 0],[200, 280, 0], [100, 50, 0]]
 
-    choise = 'blend'
-    # choise = 'alpha'
+    # choise = 'blend'
+    choise = 'alpha'
     # choise = 'cat'
 
     if choise == 'cat' :
         parametr = GL_SCISSOR_TEST
-        glScissor(200,200,100,80) # begin point, width and height
+        glScissor(0,0,400,500) # begin point, width and height
     elif choise == 'alpha' :
         parametr = GL_ALPHA_TEST
-        glAlphaFunc(GL_GREATER,0.4)
+        glAlphaFunc(GL_GREATER,0.22)
     elif choise == 'blend' :
         parametr = GL_BLEND
         sfactor = GL_SRC_ALPHA

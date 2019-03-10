@@ -2,7 +2,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
-from gl_implemet.gl_primitives import draw_point, draw_line
+from gl_implement.gl_primitives import draw_point, draw_line
 
 width, height = 640,480
 
