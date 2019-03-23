@@ -6,22 +6,23 @@ def draw_point( size, color, point_coord, point_smooth ) :
     glColor3d(color[0], color[1], color[2])
     if point_smooth :
         glEnable(GL_POINT_SMOOTH)
-    else :
-        glDisable(GL_POINT_SMOOTH)
     glBegin(GL_POINTS)
     glVertex3d(point_coord[0], point_coord[1], point_coord[2])
     glVertex3d(point_coord[0], point_coord[1], point_coord[2])
     glEnd()
 
-def draw_line(width_line, color, beg_coord, end_coord, point_smooth):
+def draw_line(width_line, color, beg_coord, end_coord, line_smooth):
     glLineWidth(width_line)
     glColor3d(color[0], color[1], color[2])
+    if line_smooth :
+        print('хуй')
+        glEnable(GL_LINE_SMOOTH)
     glBegin(GL_LINES)
     glVertex3d(beg_coord[0], beg_coord[1], beg_coord[2])
     glVertex3d(end_coord[0], end_coord[1], end_coord[2])
     glEnd()
 
-def draw_line_strip(width_line, color, beg_coord, end_coord, point_smooth, *addit_end_coord):
+def draw_line_strip(width_line, color, beg_coord, end_coord, *addit_end_coord):
     glLineWidth(width_line)
     glBegin(GL_LINE_STRIP)
     # base line
@@ -34,7 +35,7 @@ def draw_line_strip(width_line, color, beg_coord, end_coord, point_smooth, *addi
         glVertex3d(coord[0], coord[1], coord[2])
     glEnd()
 
-def draw_line_loop(width_line, color, beg_coord, end_coord, point_smooth, *addit_end_coord) :
+def draw_line_loop(width_line, color, beg_coord, end_coord, *addit_end_coord) :
     glLineWidth(width_line)
     glBegin(GL_LINE_LOOP)
     # base line
@@ -58,7 +59,7 @@ def gl_fill_t(filling_type) :
     else :
         print("Error arguments!")
 
-def draw_triangle(width_line, color, coord, point_smooth, filling_type) :
+def draw_triangle(width_line, color, coord, filling_type) :
     glLineWidth(width_line)
     glPolygonMode(GL_FRONT_AND_BACK, gl_fill_t(filling_type))
     glBegin(GL_TRIANGLES)
@@ -67,7 +68,7 @@ def draw_triangle(width_line, color, coord, point_smooth, filling_type) :
         glVertex3d(el[0], el[1], el[2])
     glEnd()
 
-def draw_triangle_strip(width_line, color, coord, point_smooth, filling_type) :
+def draw_triangle_strip(width_line, color, coord, filling_type) :
     glLineWidth(width_line)
     glPolygonMode(GL_FRONT_AND_BACK, gl_fill_t(filling_type))
     glBegin(GL_TRIANGLE_STRIP)
@@ -76,7 +77,7 @@ def draw_triangle_strip(width_line, color, coord, point_smooth, filling_type) :
         glVertex3d(el[0], el[1], el[2])
     glEnd()
 
-def draw_triangle_fan(width_line, color, coord, point_smooth, filling_type) :
+def draw_triangle_fan(width_line, color, coord, filling_type) :
     glLineWidth(width_line)
     glPolygonMode(GL_FRONT_AND_BACK, gl_fill_t(filling_type))
     glBegin(GL_TRIANGLE_FAN)
@@ -85,7 +86,7 @@ def draw_triangle_fan(width_line, color, coord, point_smooth, filling_type) :
         glVertex3d(el[0], el[1], el[2])
     glEnd()
 
-def draw_quad(width_line, color, coord, point_smooth, filling_type) :
+def draw_quad(width_line, color, coord, filling_type) :
     glLineWidth(width_line)
     glPolygonMode(GL_FRONT_AND_BACK, gl_fill_t(filling_type))
     glBegin(GL_QUADS)
@@ -94,7 +95,7 @@ def draw_quad(width_line, color, coord, point_smooth, filling_type) :
         glVertex3d(el[0], el[1], el[2])
     glEnd()
 
-def draw_quad_strip(width_line, color, coord, point_smooth, filling_type) :
+def draw_quad_strip(width_line, color, coord, filling_type) :
     glLineWidth(width_line)
     glPolygonMode(GL_FRONT_AND_BACK, gl_fill_t(filling_type))
     glBegin(GL_QUAD_STRIP)
@@ -103,7 +104,7 @@ def draw_quad_strip(width_line, color, coord, point_smooth, filling_type) :
         glVertex3d(el[0], el[1], el[2])
     glEnd()
 
-def draw_polygon(width_line, color, coord, point_smooth, filling_type) :
+def draw_polygon(width_line, color, coord, filling_type) :
     glLineWidth(width_line)
     glPolygonMode(GL_FRONT_AND_BACK, gl_fill_t(filling_type))
     glBegin(GL_POLYGON)
