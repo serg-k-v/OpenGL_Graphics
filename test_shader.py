@@ -15,7 +15,7 @@ def compile_shader(type, sourse) :
 
     result = glGetShaderiv(id, GL_COMPILE_STATUS)
     if result == GL_FALSE :
-        length =glGetShaderiv(id, GL_INFO_LOG_LENGTH)
+        length = glGetShaderiv(id, GL_INFO_LOG_LENGTH)
         info = glGetShaderInfoLog(id)
         print('error ! : ', info)
         glDeleteShader(id)
@@ -26,9 +26,10 @@ def create__shader(vertexShader, fragmentShader) :
     program = glCreateProgram()
     vs = compile_shader(GL_VERTEX_SHADER, vertexShader)
     fs = compile_shader(GL_FRAGMENT_SHADER, fragmentShader)
-    print('FUCK', fs)
+
     glAttachShader(program, vs)
     glAttachShader(program, fs)
+
     glLinkProgram(program)
     glValidateProgram(program)
     glDeleteShader(vs)
@@ -37,67 +38,53 @@ def create__shader(vertexShader, fragmentShader) :
     return program
 
 def draw() :
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glLoadIdentity()
-
+    glClear(GL_COLOR_BUFFER_BIT)
+    # glLoadIdentity()
     # position = np.array([[-1/2, 1/2, 0],[1/2, 1/2, 0],[1/2, -1/2, 0],[-1/2, -1/2, 0]], dtype='float32')
-    # position = np.array(
-    # [-1/2, 1/2, 0,
-    #   1/2, 1/2, 0,
-    #   1/2, -1/2, 0,
-    #   -1/2, -1/2, 0 ], dtype='float32')
-    position = np.array(
-    [-1/2, -1/2,
-      0, 1/2,
-      1/2, -1/2], dtype='float32')
 
-    # buffer = glGenBuffers(1)
-    # glBindBuffer(GL_ARRAY_BUFFER, buffer)
-    # glBufferData(GL_ARRAY_BUFFER, position.itemsize*len(position), position, GL_STATIC_DRAW)
-    #
-    # glEnableVertexAttribArray(0)
-    # glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, position.itemsize*2, 0)
-    #
-    # glBindBuffer(GL_ARRAY_BUFFER, 0)
+    position = np.array( [-0.5, -0.5, 0, 0.5, 0.5, -0.5], dtype='float32')
 
-
-
-    vertexShader = """
-    #version 450 core
-    in vec4 position;
-
-    void main() {
-         gl_Position = position;
-    }
-    """
-
-    fragmentShader = """
-    #version 450 core
-    out vec4 color;
-
-    void main() {
-        color = vec4(1.0, 0.0, 0.0, 1.0);
-    }
-    """
-    shader = create__shader(vertexShader, fragmentShader)
-    glUseProgram(shader);
+    glEnableClientState(GL_VERTEX_ARRAY)
+    # glEnableClientState(GL_COLOR_ARRAY)
+    glVertexPointer(3, GL_FLOAT, 0, position)
+    # glColorPointer(3, GL_FLOAT, 0, pointcolor)
     glDrawArrays(GL_TRIANGLES, 0, 3)
+    glDisableClientState(GL_VERTEX_ARRAY)
+    # glDisableClientState(GL_COLOR_ARRAY)            # Отключаем использование массива вершин
     glutSwapBuffers()
 
 
+def g___g() :
+        vertexShader = """
+        void main() {
+             gl_Position = gl_Vertex;
+        }
+        """
+
+        fragmentShader = """
+        varying vec4 vertex_color;
+                    void main() {
+                        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }"""
+        shader = create__shader(vertexShader, fragmentShader)
+        glUseProgram(shader);
 
 def Init_GL_Window(num_window, width, height) :
     glutInit()
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
+
+    glutInitContextVersion(4, 5);
+    glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
+    glutInitContextProfile(GLUT_CORE_PROFILE);
+
+
     glutInitWindowSize(width, height)
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
     glutInitWindowPosition(300, 300)
     window = glutCreateWindow("My First app on OpenGL")
 
     glutDisplayFunc(draw)
     # glClearColor(.6, .2, .4 , 1.0) # background color
-    glutInitContextProfile(GLUT_CORE_PROFILE)
-    glutInitContextVersion(4, 5)
-
+    g___g()
     glutMainLoop()
 
 
