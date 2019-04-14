@@ -11,6 +11,8 @@ for j, el in enumerate(path):
     for k,i in enumerate(points_curve):
         curves[j][k] = np.array([el.point(i).real, el.point(i).imag])
 
+
+# My realization of besiar curves
 points_arr = np.array([[108.1, 63.0],
                        [95.9, 63.1],
                        [86.4, 64.9],

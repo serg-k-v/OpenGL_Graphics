@@ -1,12 +1,14 @@
-# -*- coding: utf-8 -*-
-# Импортируем все необходимые библиотеки:
 from OpenGL.GL import *
 from OpenGL.GLUT import *
-#import sys
+import glm
 import numpy as np
 import bezier_curves as b_c
 
 width, height = 600,600
+zoomFactor = 1.0
+previous_m_state_x, previous_m_state_y = 0,0
+
+scalar_matrix = np.array([[zoomFactor, 0.0, 0.0, 0.0],[0.0, zoomFactor, 0.0, 0.0],[0.0, 0.0, zoomFactor, 0.0,],[0.0, 0.0, 0.0, 1.0]])
 
 rotate_mtr_on_z = lambda alpha : np.array([[np.cos(alpha),0,np.sin(alpha)], [0,1,0],[-np.sin(alpha),0,np.cos(alpha)]])
 
@@ -62,6 +64,23 @@ def create__shader(vertexShader, fragmentShader) :
 
     return program
 
+def mouse(button, state, x, y):
+    global zoomFactor, scalar_matrix
+    # print('button: ', button)
+    if button == 3 :
+        if zoomFactor + 0.05 < 2 :
+            zoomFactor += 0.05;
+            # glScale(zoomFactor,zoomFactor,zoomFactor)
+    elif button == 4:
+        if zoomFactor - 0.05  > 0.4 :
+            zoomFactor -= 0.05;
+
+    scalar_matrix = np.array([[zoomFactor, 0.0, 0.0, 0.0],[0.0, zoomFactor, 0.0, 0.0],[0.0, 0.0, zoomFactor, 0.0,],[0.0, 0.0, 0.0, 1.0]])
+            # glScale(zoomFactor,zoomFactor,zoomFactor)
+    print('zoom', zoomFactor)
+    glutPostRedisplay()
+
+
 def draw():
     glClear(GL_COLOR_BUFFER_BIT)      # Очищаем экран и заливаем серым цветом
     glEnableClientState(GL_VERTEX_ARRAY) # Включаем использование массива вершин
@@ -77,8 +96,14 @@ def draw():
     glDisableClientState(GL_VERTEX_ARRAY) # Отключаем использование массива вершин
 
     vertexShader = """
+    //uniform mat4 projMat;
+    //uniform mat4 viewMat;
+    uniform mat4 modelMat;
+    mat4 try = mat4(vec4(1.5, 0.0, 0.0, 0.0),vec4(0.0, 1.5, 0.0, 0.0),vec4(0.0, 0.0, 1.5, 0.0), vec4(0.0, 0.0,0.0, 1.0));
+
     void main(){
-        gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+        gl_Position = modelMat * vec4(vec3(gl_Vertex), 1.0);
+        //gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex; //for gScalar
     }
     """
     fragmentShader = """
@@ -88,7 +113,29 @@ def draw():
 
     shader = create__shader(vertexShader, fragmentShader)
     glUseProgram(shader)
+
+
+
+    # rotationMatrix = glm.rotate(glm.mat4(1.0), 90.0, glm.vec3(0.0,0.0,1.0))
+    # print(rotationMatrix)
+    modelMatIdx = glGetUniformLocation(shader, "modelMat")
+    # viewMatIdx = glGetUniformLocation(shader, "viewMat")
+    # projMatIdx = glGetUniformLocation(shader, "projMat")
+    global scalar_matrix
+    print(scalar_matrix)
+
+    glUniformMatrix4fv(modelMatIdx, 1, GL_FALSE, scalar_matrix);
+
+    # glUniformMatrix4fv(modelMatIdx, 1, GL_FALSE, rotationMatrix );
+
+
+    # UniformMatrix4fv(viewMatIdx, 1, FALSE_, glm.value_ptr(viewMat));
+    # UniformMatrix4fv(modelMatIdx, 1, FALSE_, glm.value_ptr(modelMat));
+
+
     glutSwapBuffers()   # Выводим все нарисованное в памяти на экран
+
+#
 
 def Init_GL_Window(num_window, width, height) :
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
@@ -96,13 +143,15 @@ def Init_GL_Window(num_window, width, height) :
     glutInitWindowPosition(100, 100)
     glutInit(sys.argv)
     glutCreateWindow(b"Shaders!")
+
     glutDisplayFunc(draw)
-    glutIdleFunc(draw)
+    # glutIdleFunc(draw)
+    glutMouseFunc(mouse)
     glClearColor(0.2, 0.2, 0.2, 1)
-    #
-    glRotatef(-10, 1, 0, 0)     # Поворот шейдера в нужную проекцию
-    glRotatef(60, 0, 1, 0)
-    glRotatef(40, 0, 0, 1)
+
+    # glRotatef(-10, 1, 0, 0) # Поворот шейдера в нужную проекцию
+    # glRotatef(60, 0, 1, 0)
+    # glRotatef(40, 0, 0, 1)
 
     glutMainLoop()
 
