@@ -10,13 +10,21 @@ def draw() :
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
 
-
+    glBegin(GL_LINE_STRIP)
+    # base line
+    glColor3d(color[0], color[1], color[2])
+    glVertex3d(beg_coord[0], beg_coord[1], beg_coord[2])
+    glVertex3d(end_coord[0], end_coord[1], end_coord[2])
+    # addition line
+    for coord  in addit_end_coord:
+        glColor4d(0, 1, 0)
+        glVertex3d(coord[0], coord[1], coord[2])
     # draw_point(10, [.1, .1, .5], [100, 200, 0], False)
     # prm.draw_point(10, [.1, .1, .5], [100, 200, 0], False)
     # prm.draw_point(20, [.1, .17, .5], [50, 100, 0], False)
     # prm.draw_point(40, [.3, .5, 0.5], [150, 400, 0], True)
     #
-    draw_line(50., [1., .5, 1.], [50, 50, 0], [300, 100, 0], True)
+    # draw_line(50., [1., .5, 1.], [50, 50, 0], [300, 100, 0], True)
     # prm.draw_line(5, [1., .5, 1.], [50, 50, 0], [300, 100, 0], False)
     # prm.draw_line(5, [1., 1., 1.], [300, 50, 0], [500, 400, 0], False)
     #
