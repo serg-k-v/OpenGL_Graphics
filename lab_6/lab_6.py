@@ -7,8 +7,17 @@ import bezier_curves as b_c
 width, height = 600,600
 zoomFactor = 1.0
 previous_m_state_x, previous_m_state_y = 0,0
-
-scalar_matrix = np.array([[zoomFactor, 0.0, 0.0, 0.0],[0.0, zoomFactor, 0.0, 0.0],[0.0, 0.0, zoomFactor, 0.0,],[0.0, 0.0, 0.0, 1.0]])
+mouse_speed = 1.5
+horisontal_angle = np.pi
+vertical_angle = 0.0
+scalar_matrix = np.array([[zoomFactor, 0.0, 0.0, 0.0],
+                          [0.0, zoomFactor, 0.0, 0.0],
+                          [0.0, 0.0, zoomFactor, 0.0,],
+                          [0.0, 0.0, 0.0, 1.0]])
+view_matrix = np.array([[1.0, 0.0, 0.0, 0.0],
+                        [0.0, 1.0, 0.0, 0.0],
+                        [0.0, 0.0, 1.0, 0.0],
+                        [0.0, 0.0, 0.0, 1.0]])
 
 rotate_mtr_on_z = lambda alpha : np.array([[np.cos(alpha),0,np.sin(alpha)], [0,1,0],[-np.sin(alpha),0,np.cos(alpha)]])
 
@@ -66,19 +75,46 @@ def create__shader(vertexShader, fragmentShader) :
 
 def mouse(button, state, x, y):
     global zoomFactor, scalar_matrix
-    # print('button: ', button)
     if button == 3 :
         if zoomFactor + 0.05 < 2 :
             zoomFactor += 0.05;
-            # glScale(zoomFactor,zoomFactor,zoomFactor)
     elif button == 4:
         if zoomFactor - 0.05  > 0.4 :
             zoomFactor -= 0.05;
+    scalar_matrix = np.array([[zoomFactor, 0.0, 0.0, 0.0],
+                             [0.0, zoomFactor, 0.0,  0.0],
+                             [0.0, 0.0, zoomFactor, 0.0,],
+                             [0.0, 0.0, 0.0,        1.0]])
+    # glutPostRedisplay() #for redraw
 
-    scalar_matrix = np.array([[zoomFactor, 0.0, 0.0, 0.0],[0.0, zoomFactor, 0.0, 0.0],[0.0, 0.0, zoomFactor, 0.0,],[0.0, 0.0, 0.0, 1.0]])
-            # glScale(zoomFactor,zoomFactor,zoomFactor)
-    print('zoom', zoomFactor)
-    glutPostRedisplay()
+# def handle__(x, y):
+#     print('active, x : ', x, 'y : ', y)
+
+def handle_(x, y):
+    # print('passive, x : ', x, 'y : ', y)
+    # glutWarpPointer(width/2, height/2)
+    global horisontal_angle, vertical_angle, view_matrix
+
+    horisontal_angle += mouse_speed * (width/2  - x)
+    vertical_angle   += mouse_speed * (height/2 - y)
+
+    direction = np.array([np.cos(vertical_angle)*np.sin(horisontal_angle),
+                          np.sin(vertical_angle),
+                          np.cos(vertical_angle)*np.cos(horisontal_angle)])
+    right = np.array([np.sin(horisontal_angle - np.pi/2),
+                      0,
+                      np.cos(horisontal_angle - np.pi/2)])
+
+    up = np.append(np.cross(right, direction),[0])
+    position = np.array([1.0, 1.0, 1.0, 0.0])
+
+    print(up)
+    view_matrix = np.array([position,
+                            position + np.append(direction, [0]),
+                            up,
+                            [0.0, 0.0, 0.0, 1.0]])
+    print(view_matrix)
+
 
 
 def draw():
@@ -97,9 +133,8 @@ def draw():
 
     vertexShader = """
     //uniform mat4 projMat;
-    //uniform mat4 viewMat;
+    uniform mat4 viewMat;
     uniform mat4 modelMat;
-    mat4 try = mat4(vec4(1.5, 0.0, 0.0, 0.0),vec4(0.0, 1.5, 0.0, 0.0),vec4(0.0, 0.0, 1.5, 0.0), vec4(0.0, 0.0,0.0, 1.0));
 
     void main(){
         gl_Position = modelMat * vec4(vec3(gl_Vertex), 1.0);
@@ -116,21 +151,14 @@ def draw():
 
 
 
-    # rotationMatrix = glm.rotate(glm.mat4(1.0), 90.0, glm.vec3(0.0,0.0,1.0))
-    # print(rotationMatrix)
     modelMatIdx = glGetUniformLocation(shader, "modelMat")
-    # viewMatIdx = glGetUniformLocation(shader, "viewMat")
+    viewMatIdx = glGetUniformLocation(shader, "viewMat")
     # projMatIdx = glGetUniformLocation(shader, "projMat")
-    global scalar_matrix
-    print(scalar_matrix)
+    global scalar_matrix, view_matrix
 
     glUniformMatrix4fv(modelMatIdx, 1, GL_FALSE, scalar_matrix);
-
-    # glUniformMatrix4fv(modelMatIdx, 1, GL_FALSE, rotationMatrix );
-
-
-    # UniformMatrix4fv(viewMatIdx, 1, FALSE_, glm.value_ptr(viewMat));
-    # UniformMatrix4fv(modelMatIdx, 1, FALSE_, glm.value_ptr(modelMat));
+    glUniformMatrix4fv(viewMatIdx, 1, GL_FALSE, view_matrix);
+    # glUniformMatrix4fv(modelMatIdx, 1, FALSE_, glm.value_ptr(modelMat));
 
 
     glutSwapBuffers()   # Выводим все нарисованное в памяти на экран
@@ -145,13 +173,12 @@ def Init_GL_Window(num_window, width, height) :
     glutCreateWindow(b"Shaders!")
 
     glutDisplayFunc(draw)
-    # glutIdleFunc(draw)
+    glutIdleFunc(draw)
     glutMouseFunc(mouse)
-    glClearColor(0.2, 0.2, 0.2, 1)
+    # glutMotionFunc(handle__)
+    glutMotionFunc(handle_)
 
-    # glRotatef(-10, 1, 0, 0) # Поворот шейдера в нужную проекцию
-    # glRotatef(60, 0, 1, 0)
-    # glRotatef(40, 0, 0, 1)
+    glClearColor(0.2, 0.2, 0.2, 1)
 
     glutMainLoop()
 
