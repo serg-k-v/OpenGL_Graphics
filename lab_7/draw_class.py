@@ -2,7 +2,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 # import glm
 import numpy as np
-import Circle as crcl
+import Shape as shp
 
 width, height = 600,600
 
@@ -24,9 +24,17 @@ view_matrix = np.array([[1.0, 0.0, 0.0, 0.0],
 
 rotate_mtr_on_z = lambda alpha : np.array([[np.cos(alpha),0,np.sin(alpha)], [0,1,0],[-np.sin(alpha),0,np.cos(alpha)]])
 
-circle = crcl.Circle([0,0], 0.9, 100)
+circle = shp.Circle([0,0], 0.5, 15)
+sphere = shp.Sphere([0,0,0], 0.6, 72, 36)
+cylindre  = shp.Cylindre([0,0,0], 0.5, 0.6, 14)
+
 circle_coords = circle.create_shape()
-print(circle_coords)
+sphere_coord = sphere.create_shape()
+cylindre_coord = cylindre.create_shape()
+
+tmp_arr  = sphere_coord
+# print(tmp_arr)
+
 
 def compile_shader(type, sourse) :
     id = glCreateShader(type)
@@ -83,8 +91,8 @@ def draw():
     #     glVertexPointer(3, GL_FLOAT, 0, arr_)
     #     glDrawArrays(GL_LINE_LOOP, 0, len(arr_))
 
-    glVertexPointer(3, GL_FLOAT, 0, circle_coords)
-    glDrawArrays(GL_TRIANGLE_FAN, 0, len(circle_coords))
+    glVertexPointer(3, GL_FLOAT, 0, tmp_arr)
+    glDrawArrays(GL_TRIANGLES, 0, len(tmp_arr))
 
 
     glDisableClientState(GL_VERTEX_ARRAY) # Отключаем использование массива вершин
@@ -128,8 +136,9 @@ def Init_GL_Window(num_window, width, height) :
     glutMouseFunc(mouse)
 
     glClearColor(0.2, 0.2, 0.2, 1)
-    glRotatef(-40, 1, 0, 0)     # Поворот шейдера в нужную проекцию
-    glRotatef(50, 0, 1, 0)
+
+    glRotatef(-20, 1, 0, 0)     # Поворот шейдера в нужную проекцию
+    glRotatef(10, 0, 1, 0)
 
     glutMainLoop()
 
