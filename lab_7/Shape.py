@@ -48,11 +48,9 @@ class Cylindre(Shape):
         circle_up = Circle(center_1, self.radius, self.sectors, self.movable).create_shape()
         circle_down = circle_up - np.array([0, self.height , 0])
         res = circle_up.tolist()
-        print(np.array(res))
         res += circle_down.tolist()
 
         verticals = []
-        print( circle_up.shape[1])
         for i in range(3, circle_up.shape[0], 3):
             verticals.append(circle_up[i+1].tolist())
             verticals.append(circle_up[i].tolist())
@@ -62,16 +60,7 @@ class Cylindre(Shape):
             verticals.append(circle_down[i])
             verticals.append(circle_down[i+1])
 
-        print(verticals)
         res += verticals
-        # x = []
-        # y = []
-        # z = []
-        # for j in range(self.slices):
-        #     for i in range(self.sectors + 2):
-        #         y.append(self.center[0] + j*self.height/self.slices)
-        #         x.append( self.center[0] + self.radius * np.cos(i * 2*np.pi/self.sectors) )
-        #         z.append( self.center[1] + self.radius * np.sin(i * 2*np.pi/self.sectors) )
         return np.array(res)
 
 class Sphere(Shape):
@@ -84,16 +73,41 @@ class Sphere(Shape):
         self.stacks = stacks
         self.movable = movable
 
-    def create_shape(self):
-        x = []
-        y = []
-        z = []
+    def generate_points(self):
+        res = [[self.center[0], self.center[1]  + self.radius, self.center[2]]]
         for i in range(self.stacks):
             phi = np.pi/2  - i * np.pi/self.stacks
             for j in range(self.sectors):
-                theta = j * 2*np.pi/self.stacks
-                x.append( self.center[0] + self.radius * np.cos(phi) * np.cos(theta) )
-                y.append( self.center[1] + self.radius * np.cos(phi) * np.sin(theta) )
-                z.append( self.center[2] + self.radius * np.sin(phi) )
+                theta = j * 2*np.pi/self.sectors  # must be 2 * pi
+                # print(int(theta*100)/100)
+                x = self.center[0] + self.radius * np.sin(phi) * np.sin(theta)
+                y = self.center[1] + self.radius * np.cos(phi)
+                z = self.center[2] + self.radius * np.sin(phi) * np.cos(theta)
+                res += [[x, y, z]]
+        return np.array(res)
 
-        return np.array([x, y, z]).transpose()
+    def create_shape(self):
+        arr = self.generate_points()
+        print(arr)
+        res = []
+        up_part = []
+        down_part = []
+        inv = np.array([1, -1, 1])
+
+        for i in range(1,self.sectors):
+            up_part += [arr[0].tolist(), arr[i].tolist(), arr[i+1].tolist()]
+            down_part += [(arr[0]*inv).tolist(),(arr[i]*inv).tolist(), (arr[i+1]*inv).tolist()]
+            if i == self.sectors-1 :
+                up_part += [arr[0].tolist(), arr[1].tolist(), arr[-1].tolist()]
+                down_part += [(arr[0]*inv).tolist(),(arr[1]*inv).tolist(), (arr[-1]*inv).tolist()]
+
+
+        major_part = [[]]
+        for i in range(self.sectors, self.sectors*(self.stacks-2)):
+            pass
+
+        # print('up_part\n',np.array(up_part))
+        # print('down_part\n',np.array(down_part))
+        res += up_part
+        res += down_part
+        return np.array(res)
