@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "Shape.hpp"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -31,10 +33,6 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
-#endif
 
     // glfw window creation
     // --------------------
@@ -99,6 +97,16 @@ int main()
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
+    Circle* circle = new Circle(glm::vec3(0,0,0), 0.5, 4);
+    std::vector<float> vertices_circle = circle->create_point();
+    std::vector<int> indices_circle = circle->create_indices();
+
+    for (auto &el : vertices_circle) {
+        std::cout << el << ' ';
+    }
+    for (auto &el :  indices_circle) {
+        std::cout << el << ' ';
+    }
     float vertices[] = {
          0.5f,  0.5f, 0.0f,  // top right
          0.5f, -0.5f, 0.0f,  // bottom right
