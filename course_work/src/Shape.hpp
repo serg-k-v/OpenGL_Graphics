@@ -10,8 +10,8 @@ private:
 public:
     Shape (){}
     virtual ~Shape (){}
-    virtual std::vector<float> create_point() = 0;
-    virtual std::vector<int> create_indices() = 0;
+    virtual void create_point() = 0;
+    virtual void create_indices() = 0;
 };
 
 class Circle : public Shape {
@@ -21,6 +21,9 @@ private:
     int sectors;
     bool movable = false;
 
+    std::vector<int>  indices;
+    std::vector<float>  points;
+
 public:
     Circle (glm::vec3 center, float radius, int sectors, bool movable = false):Shape(){
         this->center = center;
@@ -28,33 +31,28 @@ public:
         this->sectors = sectors;
         this->movable = movable;
     }
+    const std::vector<int> get_indices const {return indices;}
+    const std::vector<float> get_points const {return points;}
 
-    std::vector<int> create_indices(){
-        std::vector<int> indices(3*sectors);
+
+    void create_indices(){
+        indices = std::vector<int>(3*sectors);
         for (size_t i = 0; i < sectors; i++) {
             indices[3*i] = 0;
             indices[3*i+1] = i+1;
             indices[3*i+2] = i+2 <= sectors ? i+2 : 1 ;
         }
-        return indices;
     }
-    std::vector<float> create_point(){
-        std::vector<float> points;
+    void create_point(){
         for (size_t i = 0; i < 3; i++) {
             points.push_back(center[i]);
         }
-        std::cout << "/* message */" << '\n';
         for (size_t i = 0; i < sectors; i++) {
-            std::cout << i << ' '
-                      << cos( float(i * 2 * M_PI / sectors) ) << ' '
-                      << sin( float(i * 2 * M_PI / sectors) ) << '\n';
             points.push_back(center[0] + radius * cos( i * 2 * M_PI / sectors ));
             points.push_back(center[1] + radius * sin( i * 2 * M_PI/ sectors ));
             points.push_back(center[2] + 0);
         }
-
-        return points;
     }
 
-    
+
 };
