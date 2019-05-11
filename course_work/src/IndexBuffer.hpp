@@ -1,3 +1,7 @@
+#ifndef INDEXBUFFER_HPP
+#define INDEXBUFFER_HPP
+
+
 class IndexBuffer {
 private:
     unsigned int m_RendererID;
@@ -20,3 +24,5 @@ public:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 };
+
+#endif

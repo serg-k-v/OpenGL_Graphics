@@ -1,3 +1,6 @@
+#ifndef VERTEXBUFFER_HPP
+#define VERTEXBUFFER_HPP
+
 class VertexBuffer {
 private:
     unsigned int m_RendererID;
@@ -19,3 +22,5 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 };
+
+#endif
