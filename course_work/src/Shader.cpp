@@ -41,7 +41,7 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& sourse)
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
         char* message = (char*)alloca(length*sizeof(char));
         glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "Failed to compile" << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << '\n';
+        std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << '\n';
         std::cout << message << '\n';
 
         glDeleteShader(id);
@@ -70,6 +70,10 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
 ShaderProgramSource Shader::ParseShader(const std::string& filepath){
     std::ifstream stream(filepath);
 
+    if(!stream.is_open()){
+        std::cout << "Straem dosn't open!" << '\n';
+    }
+
     enum class ShaderType {
         NONE = -1, VERTEX = 0, FRAGMENT = 1
     };
@@ -87,6 +91,7 @@ ShaderProgramSource Shader::ParseShader(const std::string& filepath){
         }
     }
 
+    // std::cout << "Shader : " << ss[0].str() << '\n' << ss[1].str() << '\n';
     return {ss[0].str(), ss[1].str()};
 }
 
