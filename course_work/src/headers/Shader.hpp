@@ -26,7 +26,7 @@ private:
     unsigned int CompileShader(unsigned int type, const std::string& sourse);
     unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
     ShaderProgramSource ParseShader(const std::string& filepath);
-    unsigned int GetUnformLocation(const std::string& name);
+    unsigned int GetUniformLocation(const std::string& name);
 };
 
 #endif

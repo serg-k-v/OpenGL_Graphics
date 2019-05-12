@@ -1,4 +1,5 @@
 #include "headers/Shader.hpp"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <string>
@@ -24,12 +25,13 @@ void Shader::Unbind() {
 }
 
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3) {
-    glUniform4f(glGetUniformLocation(name), v0, v1, v2, v3);
+    glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
 }
 
 unsigned int Shader::CompileShader(unsigned int type, const std::string& sourse){
     unsigned int id = glCreateShader(type);
-    glShaderSource(id, 1, &sourse.c_str(), nullptr);
+    const char* src = sourse.c_str();
+    glShaderSource(id, 1, &src, nullptr);
     glCompileShader(id);
 
     int result;
@@ -50,8 +52,8 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& sourse)
 
 unsigned int Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader){
     unsigned int program = glCreateProgram();
-    unsigned int vs = compile_shader(GL_VERTEX_SHADER, vertexShader)
-    unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, fragmentShader)
+    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
 
     glAttachShader(program, vs);
     glAttachShader(program, fs);
@@ -88,8 +90,8 @@ ShaderProgramSource Shader::ParseShader(const std::string& filepath){
     return {ss[0].str(), ss[1].str()};
 }
 
-unsigned int Shader::GetUnformLocation(const std::string& name){
-    int location = glGetUniformLocation(m_RendererID, name.c_str())
+unsigned int Shader::GetUniformLocation(const std::string& name){
+    int location = glGetUniformLocation(m_RendererID, name.c_str());
     if (location == -1)
         std::cout << "Warning : uniform " << name << "dosn't exist!" << '\n';
     return location;

@@ -3,9 +3,9 @@
 
 #include <iostream>
 
-#include "Shape.hpp"
-#include "VertexBuffer.hpp"
-#include "IndexBuffer.hpp"
+#include "headers/Shape.hpp"
+#include "headers/VertexBuffer.hpp"
+#include "headers/IndexBuffer.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -100,16 +100,16 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     Circle* circle = new Circle(glm::vec3(0,0,0), 0.5, 100);
-    std::vector<float> vertices_circle = circle->create_point();
-    std::vector<int> indices_circle = circle->create_indices();
+    circle->create_point();
+    circle->create_indices();
 
 
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    VertexBuffer vb(vertices_circle.data(), vertices_circle.size()*sizeof(float));
-    IndexBuffer ib(indices_circle.data(), indices_circle.size());
+    VertexBuffer vb(circle->get_points().data(), circle->get_points().size()*sizeof(float));
+    IndexBuffer ib(circle->get_indices().data(), circle->get_indices().size());
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -155,7 +155,7 @@ int main()
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         // ib.Bind();
-        glDrawElements(GL_TRIANGLES, vertices_circle.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, circle->get_points().size(), GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
