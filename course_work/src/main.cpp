@@ -44,17 +44,26 @@ int main()
         return -1;
     }
 
+    // Lightining setup
+
+    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+
+    // float qaLightPostion
+
     Shader shader("./src/shaders/Basic.shader");
     shader.Bind();
     // shader.SetUniform4f()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
-    Circle* circle = new Circle(glm::vec3(0,0,0), 0.5, 100);
+    Circle* circle = new Circle(glm::vec3(0.2,0.2,0), 0.5, 6);
     circle->create_point();
     circle->create_indices();
+    circle->create_normals();
 
-
-    unsigned int VBO, VAO, EBO;
+    unsigned int  VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
@@ -63,25 +72,8 @@ int main()
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-
-    // note that this is allowed, the call to glVertexAttribPointer
-    // registered VBO as the vertex attribute's bound vertex buffer object so
-    // afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // remember: do NOT unbind the EBO while a VAO is active as the bound element
-    // buffer object IS stored in the VAO; keep the EBO bound.
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    // You can unbind the VAO afterwards so other VAO calls won't accidentally
-    // modify this VAO, but this rarely happens. Modifying other
-    // VAOs requires a call to glBindVertexArray anyways so we generally
-    // don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0);
-
-
-    // uncomment this call to draw in wireframe polygons.
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // render loop
     // -----------
@@ -118,8 +110,6 @@ int main()
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------

@@ -23,7 +23,6 @@ $(TARGET) : $(OBJ_FILES)
 	$(CC) -o $@  $^ $(GLFWFLAGS) $(GLADFLAGS)
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
-	@echo
 	$(CC) $(CFLAGS) $(CXXFLAGS) -c -o $@  $<
 
 clean :
