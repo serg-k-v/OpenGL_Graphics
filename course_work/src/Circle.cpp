@@ -1,18 +1,17 @@
-#include "headers/Shape.hpp"
+#include "headers/Circle.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include <vector>
 #include <iostream>
-#include <typeinfo>
+// #include <typeinfo>
+
 Circle::Circle (glm::vec3 center, float radius, int sectors, bool movable):Shape() {
     this->center = center;
     this->radius = radius;
     this->sectors = sectors;
     this->movable = movable;
 }
-// const Circle::std::vector<int> get_indices const {return indices;}
-// const Circle::std::vector<float> get_points const {return points;}
 
 void Circle::create_indices() {
     for (size_t i = 0; i < (size_t)sectors; i++) {
@@ -27,8 +26,8 @@ void Circle::create_point() {
     }
     for (size_t i = 0; i < (size_t)sectors; i++) {
         points.push_back(center[0] + radius * glm::cos( i * 2 * glm::pi<float>() / sectors ));
-        points.push_back(center[1] + radius * glm::sin( i * 2 * glm::pi<float>() / sectors ));
         points.push_back(center[2] + 0);
+        points.push_back(center[1] + radius * glm::sin( i * 2 * glm::pi<float>() / sectors ));
     }
 }
 
