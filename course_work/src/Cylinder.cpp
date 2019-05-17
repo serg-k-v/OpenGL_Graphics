@@ -1,6 +1,7 @@
 #include "headers/Cylinder.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <iostream>
 // #include <typeinfo>
@@ -28,6 +29,8 @@ void Cylinder::create_indices() {
         }
     }
 }
+
+
 void Cylinder::create_point() {
     circle->create_point();
     std::vector<float> tmp(circle->get_points());
@@ -48,10 +51,31 @@ void Cylinder::create_point() {
 
 void Cylinder::create_normals() {
     // circle->create_normals();
-    // glm::vec3 v1(points[3], points[4], points[5]);
-    // glm::vec3 v2(points[6], points[7], points[8]);
-    // glm::vec3 res = glm::normalize(glm::cross(v1 - center, v2 - center));
-    // for (size_t i = 0; i < 3; i++) {
-    //     normals.push_back(res[i]);
-    // }
+    std::cout << "len : " << points.size()/3 << '\n';
+    std::cout << "\ncylinder points" << '\n';
+    for (size_t i = 0; i < points.size(); i++) {
+        if ( i%3 == 0){
+            std::cout << '\n';
+        }
+        std::cout << points[i] << " ";
+    }
+
+    for (size_t i = 0; i < points.size()/3; i++) {
+        glm::vec3 v(points[3*i],   points[3*i+1],   points[3*i+2]);
+        glm::vec3 res = v - center;
+        // std::cout << "res : " << res.x << ' ' << res.y << ' '  << res.z << '\n'
+        //           << "coords : " << points[3*indices[3*i]] << ' ' << points[3*indices[3*i]+1] << ' '  << points[3*indices[3*i]+2] << '\n';
+        normals.insert(normals.end(), glm::value_ptr(res), glm::value_ptr(res)+3);
+    }
+}
+
+void Cylinder::join_data() {
+    auto points_it = points.begin();
+    auto normals_it = normals.begin();
+    for (size_t i = 0; i < points.size()/3; i++) {
+        norm_and_point.insert(norm_and_point.end(), points_it, points_it+3);
+        norm_and_point.insert(norm_and_point.end(), normals_it, normals_it+3);
+        points_it+=3;
+        normals_it+=3;
+    }
 }

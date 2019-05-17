@@ -73,45 +73,62 @@ int main()
     shader.Bind();
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
-    Circle* circle = new Circle(glm::vec3(0,0,0), 0.5, 4);
-    circle->create_point();
-    circle->create_indices();
-    circle->create_normals();
-
-    Cylinder* cylinder = new Cylinder(glm::vec3(0,0,0), 0.5, 0.6, 30); //c, r, h, s
+    Cylinder* cylinder = new Cylinder(glm::vec3(0,0,0), 0.5, 0.6, 3); //c, r, h, s
     cylinder->create_point();
     cylinder->create_indices();
+    cylinder->create_normals();
+    cylinder->join_data();
 
-    // std::cout << "size circle point : "   << circle->get_points().size() << '\n';
-    // std::cout << "size cylinder point : " << cylinder->get_points().size() << '\n';
+
+    std::vector<float> fuck{ 0, 0, 0,     0.2, 0, 0.4,
+                             0, 0.2, 0,   0.2, 0, 0.4,
+                             0.2, 0, 0,    0,   0, 0.2,
+                             0.2, 0, 0.2, 0.2, 0, 0.2};
+    std::vector<int> ind{0,1,2, 0,1,3};
+    // std::cout << "\ncylinder points" << '\n';
+    // int i = 0;
+    // for (const auto &el : cylinder->get_points()) {
+    //     std::cout << el << " "; i++;
+    //     if ( i%3 == 0){
+    //         std::cout << '\n';
+    //     }
+    // }
+
+    // std::cout << "\ncylinder normals" << '\n';
+    // int k = 0;
+    // for (const auto &el : cylinder->get_normals()) {
+    //     std::cout << el << " "; k++;
+    //     if ( k%3 == 0){
+    //         std::cout << '\n';
+    //     }
+    // }
     //
-    std::cout << "cylinder points" << '\n';
-    for (const auto &el : cylinder->get_points()) {
-        std::cout << el << " ";
-    }
-
-    std::cout << "\ncylinder indices" << '\n';
-    int i = 0;
-    for (const auto &el : cylinder->get_indices()) {
-        std::cout << el << " "; i++;
-        if ( i%3 == 0){
-            std::cout << '\n';
-        }
-    }
+    // std::cout << "\ncylinder join" << '\n';
+    // int r = 0;
+    // for (const auto &el : cylinder->get_n_p()) {
+    //     std::cout << el << " "; r++;
+    //     if ( r%6 == 0){
+    //         std::cout << '\n';
+    //     }
+    // }
 
     unsigned int  VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
+    // VertexBuffer vb(cylinder->get_n_p().data(), cylinder->get_n_p().size()*sizeof(float));
+    // IndexBuffer ib(cylinder->get_indices().data(), cylinder->get_indices().size());
+    VertexBuffer vb(fuck.data(), fuck.size()*sizeof(float));
+    IndexBuffer ib(ind.data(), ind.size());
 
-    // VertexBuffer vb(circle->get_points().data(), circle->get_points().size()*sizeof(float));
-    // IndexBuffer ib(circle->get_indices().data(), circle->get_indices().size());
-    VertexBuffer vb(cylinder->get_points().data(), cylinder->get_points().size()*sizeof(float));
-    IndexBuffer ib(cylinder->get_indices().data(), cylinder->get_indices().size());
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
+    glEnableVertexAttribArray(1);
+
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // glBindVertexArray(0);
 
     // render loop
     // -----------
@@ -134,10 +151,9 @@ int main()
         shader.SetMat4("projection", projection);
         shader.SetMat4("view", view);
         shader.Bind();
-        glBindVertexArray(VAO);
 
-        glDrawElements(GL_TRIANGLES, cylinder->get_points().size(), GL_UNSIGNED_INT, 0);
-        // glDrawElements(GL_TRIANGLES, circle->get_points().size(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, fuck.size(), GL_UNSIGNED_INT, 0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -146,7 +162,6 @@ int main()
     }
 
     glDeleteVertexArrays(1, &VAO);
-
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
