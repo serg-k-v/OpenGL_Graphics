@@ -1,29 +1,26 @@
-#ifndef CYLINDER_HPP
-#define CYLINDER_HPP
-
+#ifndef SPHERE_HPP
+#define SPHERE_HPP
+#include "Shape.hpp"
 #include <glm/glm.hpp>
 #include <vector>
-#include "Circle.hpp"
-#include "Shape.hpp"
 
-
-class Cylinder : public Shape {
+class Sphere : public Shape {
 private:
     glm::vec3 center;
     float radius;
-    float height;
     int sectors;
+    int stack;
     bool movable = false;
 
-    Circle* circle;
     std::vector<int>  indices;
     std::vector<float>  points;
     std::vector<float>  normals;
     std::vector<float>  norm_and_point;
 
 public:
-    Cylinder (glm::vec3 center, float radius, float height, int sectors, bool movable=false);
-    ~Cylinder();
+    Sphere (glm::vec3 center, float radius, int sectors, int stack, bool movable=false);
+    ~Sphere (){};
+
     const std::vector<int> &get_indices() const {return indices;}
     const std::vector<float> &get_points() const {return points;}
     const std::vector<float> &get_normals() const {return normals;}

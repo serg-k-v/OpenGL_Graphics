@@ -5,6 +5,7 @@
 
 #include "headers/Circle.hpp"
 #include "headers/Cylinder.hpp"
+#include "headers/Sphere.hpp"
 #include "headers/Camera.hpp"
 #include "headers/Shader.hpp"
 #include "headers/VertexBuffer.hpp"
@@ -69,22 +70,35 @@ int main()
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    Shader shader("./src/shaders/Basic.shader");
+    Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
-    Cylinder* cylinder = new Cylinder(glm::vec3(0,0,0), 0.5, 0.6, 3); //c, r, h, s
+    Cylinder* cylinder = new Cylinder(glm::vec3(-1,0,0), 0.4, 0.6, 4); //c, r, h, s
     cylinder->create_point();
     cylinder->create_indices();
     cylinder->create_normals();
     cylinder->join_data();
 
+    Sphere* sphere = new Sphere(glm::vec3(1,0,0), 0.4, 36, 18);
+    sphere->create_point();
+    sphere->create_indices();
+    sphere->create_normals();
+    sphere->join_data();
 
-    std::vector<float> fuck{ 0, 0, 0,     0.2, 0, 0.4,
-                             0, 0.2, 0,   0.2, 0, 0.4,
-                             0.2, 0, 0,    0,   0, 0.2,
-                             0.2, 0, 0.2, 0.2, 0, 0.2};
-    std::vector<int> ind{0,1,2, 0,1,3};
+    std::vector<float> try_tt;
+    try_tt.insert(try_tt.end(), cylinder->get_n_p().begin(), cylinder->get_n_p().end());
+    try_tt.insert(try_tt.end(), sphere->get_n_p().begin(), sphere->get_n_p().end());
+    std::vector<int> ind_tt;
+    ind_tt.insert(ind_tt.end(), cylinder->get_indices().begin(), cylinder->get_indices().end());
+    ind_tt.insert(ind_tt.end(), sphere->get_indices().begin(), sphere->get_indices().end());
+
+    // std::vector<float> fuck{ 0, 0, 0,     0, 0, 0,
+    //                          0, 0.2, 0,   -0.2, 0, 0,
+    //                          0.2, 0, 0,    0,   0, -0.2,
+    //                          0.2, 0, 0.2, -0.2, 0, 0.2};
+    // std::vector<int> ind{0,1,2, 0,1,3};
+
     // std::cout << "\ncylinder points" << '\n';
     // int i = 0;
     // for (const auto &el : cylinder->get_points()) {
@@ -117,8 +131,8 @@ int main()
     glBindVertexArray(VAO);
     // VertexBuffer vb(cylinder->get_n_p().data(), cylinder->get_n_p().size()*sizeof(float));
     // IndexBuffer ib(cylinder->get_indices().data(), cylinder->get_indices().size());
-    VertexBuffer vb(fuck.data(), fuck.size()*sizeof(float));
-    IndexBuffer ib(ind.data(), ind.size());
+    VertexBuffer vb(try_tt.data(), try_tt.size()*sizeof(float));
+    IndexBuffer ib(ind_tt.data(), ind_tt.size());
 
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
@@ -150,10 +164,11 @@ int main()
 
         shader.SetMat4("projection", projection);
         shader.SetMat4("view", view);
+        // shader.SetVec3("viewPos", camera.Position);
         shader.Bind();
 
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, fuck.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, ind_tt.size(), GL_UNSIGNED_INT, 0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

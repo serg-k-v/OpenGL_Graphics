@@ -23,6 +23,8 @@ public:
     void Unbind();
     void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
     void SetMat4(const std::string &name, const glm::mat4 &mat);
+    void SetVec3(const std::string &name, const glm::vec3 &value);
+
 
 private:
     unsigned int CompileShader(unsigned int type, const std::string& sourse);

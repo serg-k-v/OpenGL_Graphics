@@ -30,6 +30,10 @@ void Cylinder::create_indices() {
     }
 }
 
+Cylinder::~Cylinder() {
+    delete circle;
+}
+
 
 void Cylinder::create_point() {
     circle->create_point();
