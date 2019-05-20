@@ -54,16 +54,6 @@ void Cylinder::create_point() {
 }
 
 void Cylinder::create_normals() {
-    // circle->create_normals();
-    std::cout << "len : " << points.size()/3 << '\n';
-    std::cout << "\ncylinder points" << '\n';
-    for (size_t i = 0; i < points.size(); i++) {
-        if ( i%3 == 0){
-            std::cout << '\n';
-        }
-        std::cout << points[i] << " ";
-    }
-
     for (size_t i = 0; i < points.size()/3; i++) {
         glm::vec3 v(points[3*i],   points[3*i+1],   points[3*i+2]);
         glm::vec3 res = v - center;

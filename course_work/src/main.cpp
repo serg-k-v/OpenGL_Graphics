@@ -73,23 +73,24 @@ int main()
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
-    Cylinder* cylinder = new Cylinder(glm::vec3(1,0,0), 0.2, 0.3, 10); //c, r, h, s
+    Cylinder* cylinder = new Cylinder(glm::vec3(0,0,0), 0.4, 0.3, 20); //c, r, h, s
     cylinder->create_point();
     cylinder->create_indices();
     cylinder->create_normals();
     cylinder->join_data();
 
-    Cylinder* cylinder_2 = new Cylinder(glm::vec3(-1,0,0), 0.2, 0.3, 10); //c, r, h, s
+    Sphere* sphere = new Sphere(glm::vec3(0,0.4,0), 0.4, 32, 16);
+    sphere->create_point();
+    sphere->create_indices();
+    sphere->create_normals();
+    sphere->join_data();
+
+    Cylinder* cylinder_2 = new Cylinder(glm::vec3(-1,0,0), 0.4, 0.3, 4); //c, r, h, s
     cylinder_2->create_point();
     cylinder_2->create_indices();
     cylinder_2->create_normals();
     cylinder_2->join_data();
 
-    Sphere* sphere = new Sphere(glm::vec3(-1,0,0), 0.4, 10, 5);
-    sphere->create_point();
-    sphere->create_indices();
-    sphere->create_normals();
-    sphere->join_data();
 
     Sphere* sphere_2 = new Sphere(glm::vec3(1,0,0), 0.4, 10, 5);
     sphere_2->create_point();
@@ -98,31 +99,57 @@ int main()
     sphere_2->join_data();
 
     std::vector<float> try_tt;
-    // try_tt.insert(try_tt.end(), cylinder->get_n_p().begin(), cylinder->get_n_p().end());
-    // try_tt.insert(try_tt.end(), cylinder_2->get_n_p().begin(), cylinder_2->get_n_p().end());
-
+    try_tt.insert(try_tt.end(), cylinder->get_n_p().begin(), cylinder->get_n_p().end());
     try_tt.insert(try_tt.end(), sphere->get_n_p().begin(), sphere->get_n_p().end());
+
+    // try_tt.insert(try_tt.end(), cylinder_2->get_n_p().begin(), cylinder_2->get_n_p().end());
     // try_tt.insert(try_tt.end(), sphere_2->get_n_p().begin(), sphere_2->get_n_p().end());
 
     std::vector<int> ind_tt;
-    // ind_tt.insert(ind_tt.end(), cylinder->get_indices().begin(), cylinder->get_indices().end());
-    // ind_tt.insert(ind_tt.end(), cylinder_2->get_indices().begin(), cylinder_2->get_indices().end());
+    ind_tt.insert(ind_tt.end(), cylinder->get_indices().begin(), cylinder->get_indices().end());
 
-    ind_tt.insert(ind_tt.end(), sphere->get_indices().begin(), sphere->get_indices().end());
+    std::vector<int> tmp = sphere->get_indices();
+    int len_cylind = cylinder->get_points().size()/3;
+    for (int i = 0; i < tmp.size(); i++){
+        ind_tt.push_back(tmp[i] + len_cylind);
+    }
+
+    // ind_tt.insert(ind_tt.end(), sphere->get_indices().begin(), sphere->get_indices().end());
+
+    // ind_tt.insert(ind_tt.end(), cylinder_2->get_indices().begin(), cylinder_2->get_indices().end());
     // ind_tt.insert(ind_tt.end(), sphere_2->get_indices().begin(), sphere_2->get_indices().end());
 
     Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
 
-    // std::vector<float> fuck{ 0, 0, 0,     0, 0, 0,
+    // std::vector<float> fuck{ 0, 0, 0,      0, 0, 0,
     //                          0, 0.2, 0,   -0.2, 0, 0,
     //                          0.2, 0, 0,    0,   0, -0.2,
-    //                          0.2, 0, 0.2, -0.2, 0, 0.2};
-    // std::vector<int> ind{0,1,2, 0,1,3};
+    //                          0.2, 0, 0.2, -0.2, 0, 0.2,
+    //
+    //                          1, 1, 1,      0,   0, 0,
+    //                          1, 1.2, 1,   -0.2, 0, 0,
+    //                          1.2, 1, 1,    0,   0, -0.2,
+    //                          1.2, 1, 1.2, -0.2, 0, 0.2};
+    // std::vector<int> ind{0,1,2, 0,1,3, 4,5,6, 4,5,7};
+    //
+    // try_tt.insert(try_tt.end(), fuck.begin(), fuck.end());
+    // ind_tt.insert(ind_tt.end(), ind.begin(), ind.end());
+    // ind_tt.insert(ind_tt.end(), ind.begin(), ind.end());
 
-    std::cout << "\ncylinder join" << '\n';
+
+    std::cout << "\nindexies" << '\n';
+    int i = 0;
+    for (const auto &el : ind_tt) {
+        std::cout << el << " "; i++;
+        if ( i%6 == 0){
+            std::cout << '\n';
+        }
+    }
+
+    // std::cout << "\ncylinder join" << '\n';
     int r = 0;
-    for (const auto &el : cylinder->get_n_p()) {
+    for (const auto &el : try_tt) {
         std::cout << el << " "; r++;
         if ( r%6 == 0){
             std::cout << '\n';
@@ -172,12 +199,12 @@ int main()
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, ind_tt.size(), GL_UNSIGNED_INT, 0);
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+    // shader.Unbind();
 
     glDeleteVertexArrays(1, &VAO);
     // glfw: terminate, clearing all previously allocated GLFW resources.

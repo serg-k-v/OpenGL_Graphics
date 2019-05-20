@@ -52,15 +52,15 @@ void Sphere::create_point() {
     {
         stackAngle = glm::pi<float>() / 2 - i * stackStep;        // starting from pi/2 to -pi/2
         xy = radius * cosf(stackAngle);             // r * cos(u)
-        z = radius * sinf(stackAngle);              // r * sin(u)
+        z = center.z + radius * sinf(stackAngle);              // r * sin(u)
 
         for(int j = 0; j <= sectors; ++j)
         {
             sectorAngle = j * sectorStep;           // starting from 0 to 2pi
 
             // vertex position (x, y, z)
-            x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
-            y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
+            x = center.x +  xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
+            y = center.y + xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
             points.push_back(x);
             points.push_back(y);
             points.push_back(z);
