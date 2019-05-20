@@ -66,32 +66,53 @@ int main()
 
     // Lightining setup
 
-    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+    // glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+    // glEnable(GL_LIGHTING);
+    // glEnable(GL_LIGHT0);
 
-    Shader shader("./src/shaders/Basic.glsl");
-    shader.Bind();
+
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
-    Cylinder* cylinder = new Cylinder(glm::vec3(-1,0,0), 0.4, 0.6, 4); //c, r, h, s
+    Cylinder* cylinder = new Cylinder(glm::vec3(1,0,0), 0.2, 0.3, 10); //c, r, h, s
     cylinder->create_point();
     cylinder->create_indices();
     cylinder->create_normals();
     cylinder->join_data();
 
-    Sphere* sphere = new Sphere(glm::vec3(1,0,0), 0.4, 36, 18);
+    Cylinder* cylinder_2 = new Cylinder(glm::vec3(-1,0,0), 0.2, 0.3, 10); //c, r, h, s
+    cylinder_2->create_point();
+    cylinder_2->create_indices();
+    cylinder_2->create_normals();
+    cylinder_2->join_data();
+
+    Sphere* sphere = new Sphere(glm::vec3(-1,0,0), 0.4, 10, 5);
     sphere->create_point();
     sphere->create_indices();
     sphere->create_normals();
     sphere->join_data();
 
+    Sphere* sphere_2 = new Sphere(glm::vec3(1,0,0), 0.4, 10, 5);
+    sphere_2->create_point();
+    sphere_2->create_indices();
+    sphere_2->create_normals();
+    sphere_2->join_data();
+
     std::vector<float> try_tt;
-    try_tt.insert(try_tt.end(), cylinder->get_n_p().begin(), cylinder->get_n_p().end());
+    // try_tt.insert(try_tt.end(), cylinder->get_n_p().begin(), cylinder->get_n_p().end());
+    // try_tt.insert(try_tt.end(), cylinder_2->get_n_p().begin(), cylinder_2->get_n_p().end());
+
     try_tt.insert(try_tt.end(), sphere->get_n_p().begin(), sphere->get_n_p().end());
+    // try_tt.insert(try_tt.end(), sphere_2->get_n_p().begin(), sphere_2->get_n_p().end());
+
     std::vector<int> ind_tt;
-    ind_tt.insert(ind_tt.end(), cylinder->get_indices().begin(), cylinder->get_indices().end());
+    // ind_tt.insert(ind_tt.end(), cylinder->get_indices().begin(), cylinder->get_indices().end());
+    // ind_tt.insert(ind_tt.end(), cylinder_2->get_indices().begin(), cylinder_2->get_indices().end());
+
     ind_tt.insert(ind_tt.end(), sphere->get_indices().begin(), sphere->get_indices().end());
+    // ind_tt.insert(ind_tt.end(), sphere_2->get_indices().begin(), sphere_2->get_indices().end());
+
+    Shader shader("./src/shaders/Basic.glsl");
+    shader.Bind();
 
     // std::vector<float> fuck{ 0, 0, 0,     0, 0, 0,
     //                          0, 0.2, 0,   -0.2, 0, 0,
@@ -99,32 +120,14 @@ int main()
     //                          0.2, 0, 0.2, -0.2, 0, 0.2};
     // std::vector<int> ind{0,1,2, 0,1,3};
 
-    // std::cout << "\ncylinder points" << '\n';
-    // int i = 0;
-    // for (const auto &el : cylinder->get_points()) {
-    //     std::cout << el << " "; i++;
-    //     if ( i%3 == 0){
-    //         std::cout << '\n';
-    //     }
-    // }
-
-    // std::cout << "\ncylinder normals" << '\n';
-    // int k = 0;
-    // for (const auto &el : cylinder->get_normals()) {
-    //     std::cout << el << " "; k++;
-    //     if ( k%3 == 0){
-    //         std::cout << '\n';
-    //     }
-    // }
-    //
-    // std::cout << "\ncylinder join" << '\n';
-    // int r = 0;
-    // for (const auto &el : cylinder->get_n_p()) {
-    //     std::cout << el << " "; r++;
-    //     if ( r%6 == 0){
-    //         std::cout << '\n';
-    //     }
-    // }
+    std::cout << "\ncylinder join" << '\n';
+    int r = 0;
+    for (const auto &el : cylinder->get_n_p()) {
+        std::cout << el << " "; r++;
+        if ( r%6 == 0){
+            std::cout << '\n';
+        }
+    }
 
     unsigned int  VAO;
     glGenVertexArrays(1, &VAO);

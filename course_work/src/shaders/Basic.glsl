@@ -30,7 +30,7 @@ vec3 lightPos = vec3(1.0, 1.0, 1.0);
 
 
 void main(){
-    float ambientStrength = 0.1;
+    float ambientStrength = 0.3;
     vec3 ambient = ambientStrength * lightColor;
 
     vec3 norm = normalize(Normal);
