@@ -98,78 +98,35 @@ int main()
     sphere_2->create_normals();
     sphere_2->join_data();
 
-    std::vector<float> try_tt;
-    try_tt.insert(try_tt.end(), cylinder->get_n_p().begin(), cylinder->get_n_p().end());
-    try_tt.insert(try_tt.end(), sphere->get_n_p().begin(), sphere->get_n_p().end());
-
-    // try_tt.insert(try_tt.end(), cylinder_2->get_n_p().begin(), cylinder_2->get_n_p().end());
-    // try_tt.insert(try_tt.end(), sphere_2->get_n_p().begin(), sphere_2->get_n_p().end());
-
-    std::vector<int> ind_tt;
-    ind_tt.insert(ind_tt.end(), cylinder->get_indices().begin(), cylinder->get_indices().end());
-
-    std::vector<int> tmp = sphere->get_indices();
-    int len_cylind = cylinder->get_points().size()/3;
-    for (int i = 0; i < tmp.size(); i++){
-        ind_tt.push_back(tmp[i] + len_cylind);
-    }
-
-    // ind_tt.insert(ind_tt.end(), sphere->get_indices().begin(), sphere->get_indices().end());
-
-    // ind_tt.insert(ind_tt.end(), cylinder_2->get_indices().begin(), cylinder_2->get_indices().end());
-    // ind_tt.insert(ind_tt.end(), sphere_2->get_indices().begin(), sphere_2->get_indices().end());
 
     Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
 
-    // std::vector<float> fuck{ 0, 0, 0,      0, 0, 0,
-    //                          0, 0.2, 0,   -0.2, 0, 0,
-    //                          0.2, 0, 0,    0,   0, -0.2,
-    //                          0.2, 0, 0.2, -0.2, 0, 0.2,
-    //
-    //                          1, 1, 1,      0,   0, 0,
-    //                          1, 1.2, 1,   -0.2, 0, 0,
-    //                          1.2, 1, 1,    0,   0, -0.2,
-    //                          1.2, 1, 1.2, -0.2, 0, 0.2};
-    // std::vector<int> ind{0,1,2, 0,1,3, 4,5,6, 4,5,7};
-    //
-    // try_tt.insert(try_tt.end(), fuck.begin(), fuck.end());
-    // ind_tt.insert(ind_tt.end(), ind.begin(), ind.end());
-    // ind_tt.insert(ind_tt.end(), ind.begin(), ind.end());
 
+    std::vector<float> arr_vb[2]={cylinder->get_n_p(), cylinder_2->get_n_p()};
+    std::vector<int> arr_ib[2]={cylinder->get_indices(),  cylinder_2->get_indices()};
 
-    std::cout << "\nindexies" << '\n';
-    int i = 0;
-    for (const auto &el : ind_tt) {
-        std::cout << el << " "; i++;
-        if ( i%6 == 0){
-            std::cout << '\n';
-        }
+    unsigned int VAO[2], VBO[2], IBO[2];
+    for (size_t i = 0; i < 2; i++) {
+        glGenVertexArrays(2, &VAO[i]);
+        glBindVertexArray(VAO[i]);
+
+        glGenBuffers(2, &VBO[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
+        glBufferData(GL_ARRAY_BUFFER, arr_vb[i].size()*sizeof(float), arr_vb[i].data(), GL_STATIC_DRAW);
+        // VertexBuffer vb(arr_vb[i].data(), arr_vb[i].size()*sizeof(float));
+        glGenBuffers(2, &IBO[i]);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO[i]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, arr_ib[i].size()*sizeof(int), arr_ib[i].data(), GL_STATIC_DRAW);
+        // IndexBuffer ib(arr_ib[i].data(), arr_ib[i].size());
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
+        glEnableVertexAttribArray(1);
     }
 
-    // std::cout << "\ncylinder join" << '\n';
-    int r = 0;
-    for (const auto &el : try_tt) {
-        std::cout << el << " "; r++;
-        if ( r%6 == 0){
-            std::cout << '\n';
-        }
-    }
-
-    unsigned int  VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-    // VertexBuffer vb(cylinder->get_n_p().data(), cylinder->get_n_p().size()*sizeof(float));
-    // IndexBuffer ib(cylinder->get_indices().data(), cylinder->get_indices().size());
-    VertexBuffer vb(try_tt.data(), try_tt.size()*sizeof(float));
-    IndexBuffer ib(ind_tt.data(), ind_tt.size());
-
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
-    glEnableVertexAttribArray(1);
 
     // glBindBuffer(GL_ARRAY_BUFFER, 0);
     // glBindVertexArray(0);
@@ -197,8 +154,11 @@ int main()
         // shader.SetVec3("viewPos", camera.Position);
         shader.Bind();
 
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, ind_tt.size(), GL_UNSIGNED_INT, 0);
+        for (size_t i = 0; i < 2; i++) {
+            glBindVertexArray(VAO[i]);
+            glDrawElements(GL_TRIANGLES, arr_ib[i].size(), GL_UNSIGNED_INT, 0);
+        }
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -206,7 +166,8 @@ int main()
     }
     // shader.Unbind();
 
-    glDeleteVertexArrays(1, &VAO);
+    glDeleteVertexArrays(2, &VAO[0]);
+    glDeleteVertexArrays(2, &VAO[1]);
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
