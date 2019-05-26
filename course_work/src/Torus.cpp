@@ -7,31 +7,75 @@
 #include <iostream>
 
 
-Torus::Torus (glm::vec3 center, float sircl_radius, int sectors, float torus_radius, bool movable):Shape() {
+Torus::Torus (glm::vec3 center, float sircl_radius, int sirc_sectors, float torus_radius, float tor_sectors, bool movable):Shape() {
     this->center = center;
     this->sircl_radius = sircl_radius;
-    this->sectors = sectors;
+    this->sirc_sectors = sirc_sectors;
     this->torus_radius = torus_radius;
+    this->tor_sectors = tor_sectors;
     this->movable = movable;
     try{
-        this->circle = new Circle(center+glm::vec3(torus_radius, 0, 0), sircl_radius, sectors);
+        this->circle = new Circle(center, sircl_radius, sirc_sectors);
     }catch(const std::bad_alloc& e){
         std::cout << "Allocation failed: " << e.what() << '\n';
+        exit (EXIT_FAILURE);
     }
+
+    create_point();
+    create_indices();
 }
 
 void Torus::create_indices() {
-    // for (size_t i = 0; i < (size_t)sectors; i++) {
-    //     indices.push_back(0);
-    //     indices.push_back(i+1);
-    //     indices.push_back(i+2 <= (size_t)sectors ? i+2 : 1) ;
-    // }
+    int point_c = tor_sectors*sirc_sectors;
+    for (size_t i = 0; i < point_c-1; i++) {
+        if ((i+1)%3==0)
+            i++;
+        indices.push_back(i);
+        indices.push_back(i+1);
+        indices.push_back((i+4)%point_c);
+
+        indices.push_back(i);
+        indices.push_back((i+3)%point_c);
+        indices.push_back((i+4)%point_c);
+    }
+    for (size_t i = 0; i < point_c; i+=3) {
+        indices.push_back(i+2);
+        indices.push_back(i);
+        indices.push_back((i+3)%point_c);
+
+        indices.push_back(i+2);
+        indices.push_back((i+5)%point_c);
+        indices.push_back((i+3)%point_c) ;
+    }
 }
+
 void Torus::create_point() {
-    for (size_t i = 0; i < (size_t)sectors; i++) {
-        points.push_back(center[0] + radius * glm::cos( i * 2 * glm::pi<float>() / sectors));
-        points.push_back(center[2] + 0);
-        points.push_back(center[1] + radius * glm::sin( i * 2 * glm::pi<float>() / sectors));
+    circle->create_point();
+    std::vector<float> crcl = circle->rotate('x', glm::pi<float>()/2, circle->get_points());
+    crcl.erase(crcl.begin(), crcl.begin()+3); //delete center cordinate
+    std::cout << "points of circle" << '\n';
+    int l = 1;
+    for (auto &el : crcl) {
+        std::cout << el << ' ';
+        if (l%3 == 0)
+            std::cout << '\n';
+        l++;
+    }
+
+    for (size_t i = 0; i < (size_t)tor_sectors; i++) {
+        for (size_t j = 0; j < (size_t)sirc_sectors; j++) {
+
+            float x = (torus_radius + crcl[3*j]*glm::cos( j * 2 * glm::pi<float>() / sirc_sectors)) * glm::cos( i * 2 * glm::pi<float>() / tor_sectors);
+            float y = crcl[3*j+1];
+            float z = (torus_radius + crcl[3*j+2]*glm::cos( j * 2 * glm::pi<float>() / sirc_sectors)) * glm::sin( i * 2 * glm::pi<float>() / tor_sectors);
+            std::cout << "i : " <<  i << ' ';
+            std::cout << "j : "  <<  j << ' ';
+            std::cout << "cos : " <<   glm::cos( i * 2 * glm::pi<float>() / tor_sectors) << ' ';
+            std::cout << "sin : " <<  glm::sin( i * 2 * glm::pi<float>() / tor_sectors) << '\n';
+            points.push_back(x);
+            points.push_back(y);
+            points.push_back(z);
+        }
     }
 }
 
@@ -42,4 +86,8 @@ void Torus::create_normals() {
     // for (size_t i = 0; i < 3; i++) {
     //     normals.push_back(res[i]);
     // }
+}
+
+Torus::~Torus() {
+    delete circle;
 }

@@ -11,18 +11,19 @@ class Torus : public Shape {
 private:
     glm::vec3 center;
     float sircl_radius;
-    int sectors;
+    int   sirc_sectors;
     float torus_radius;
-    bool movable = false;
+    int   tor_sectors;
+    bool  movable = false;
 
     Circle* circle;
-    std::vector<int>  indices;
+    std::vector<int>    indices;
     std::vector<float>  points;
     std::vector<float>  normals;
     std::vector<float>  norm_and_point;
 
 public:
-    Torus (glm::vec3 center, float sircl_radius, int sectors, float torus_radius, bool movable=false);
+    Torus (glm::vec3 center, float sircl_radius, int sirc_sectors, float torus_radius, float tor_sectors, bool movable=false);
     ~Torus ();
 
     const std::vector<int> &get_indices() const {return indices;}

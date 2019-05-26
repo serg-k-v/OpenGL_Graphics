@@ -6,6 +6,7 @@
 #include "headers/Circle.hpp"
 #include "headers/Cylinder.hpp"
 #include "headers/Sphere.hpp"
+#include "headers/Torus.hpp"
 #include "headers/Camera.hpp"
 #include "headers/Shader.hpp"
 #include "headers/VertexBuffer.hpp"
@@ -71,65 +72,59 @@ int main()
     // glEnable(GL_LIGHT0);
 
 
-    // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     Cylinder* cylinder = new Cylinder(glm::vec3(0,0,0), 0.4, 0.3, 20); //c, r, h, s
-    cylinder->create_point();
-    cylinder->create_indices();
-    cylinder->create_normals();
-    cylinder->join_data();
-
     Sphere* sphere = new Sphere(glm::vec3(0,0.4,0), 0.4, 32, 16);
-    sphere->create_point();
-    sphere->create_indices();
-    sphere->create_normals();
-    sphere->join_data();
-
     Cylinder* cylinder_2 = new Cylinder(glm::vec3(-1,0,0), 0.4, 0.3, 4); //c, r, h, s
-    cylinder_2->create_point();
-    cylinder_2->create_indices();
-    cylinder_2->create_normals();
-    cylinder_2->join_data();
-
-
     Sphere* sphere_2 = new Sphere(glm::vec3(1,0,0), 0.4, 10, 5);
-    sphere_2->create_point();
-    sphere_2->create_indices();
-    sphere_2->create_normals();
-    sphere_2->join_data();
 
+    Torus* torus = new Torus(glm::vec3(0,0,0), 0.2, 4, 0.8, 3);
+    std::cout << "Torus points" << '\n';
+    int k = 1;
+    for (auto &el : torus->get_points()) {
+        std::cout << el << ' ';
+        if(k%3 == 0)
+            std::cout << '\n';
+        k++;
+    }
+    std::cout << "Torus indices" << '\n';
+    int j = 1;
+    for (auto &el : torus->get_indices()) {
+        std::cout << el << ' ';
+        if(j%3 == 0)
+            std::cout << '\n';
+        j++;
+    }
+
+    std::cout << '\n';
 
     Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
 
 
-    std::vector<float> arr_vb[2]={cylinder->get_n_p(), cylinder_2->get_n_p()};
-    std::vector<int> arr_ib[2]={cylinder->get_indices(),  cylinder_2->get_indices()};
+    std::vector<float> arr_vb[1]={torus->get_points()};
+    std::vector<int> arr_ib[1]={torus->get_indices()};
 
-    unsigned int VAO[2], VBO[2], IBO[2];
-    for (size_t i = 0; i < 2; i++) {
-        glGenVertexArrays(2, &VAO[i]);
+    unsigned int VAO[1], VBO[1], IBO[1];
+    for (size_t i = 0; i < 1; i++) {
+        glGenVertexArrays(1, &VAO[i]);
         glBindVertexArray(VAO[i]);
 
-        glGenBuffers(2, &VBO[i]);
+        glGenBuffers(1, &VBO[i]);
         glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
         glBufferData(GL_ARRAY_BUFFER, arr_vb[i].size()*sizeof(float), arr_vb[i].data(), GL_STATIC_DRAW);
         // VertexBuffer vb(arr_vb[i].data(), arr_vb[i].size()*sizeof(float));
-        glGenBuffers(2, &IBO[i]);
+        glGenBuffers(1, &IBO[i]);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO[i]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, arr_ib[i].size()*sizeof(int), arr_ib[i].data(), GL_STATIC_DRAW);
         // IndexBuffer ib(arr_ib[i].data(), arr_ib[i].size());
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
-        glEnableVertexAttribArray(1);
+        // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
+        // glEnableVertexAttribArray(1);
     }
-
-
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    // glBindVertexArray(0);
 
     // render loop
     // -----------
@@ -154,7 +149,7 @@ int main()
         // shader.SetVec3("viewPos", camera.Position);
         shader.Bind();
 
-        for (size_t i = 0; i < 2; i++) {
+        for (size_t i = 0; i < 1; i++) {
             glBindVertexArray(VAO[i]);
             glDrawElements(GL_TRIANGLES, arr_ib[i].size(), GL_UNSIGNED_INT, 0);
         }
@@ -165,9 +160,10 @@ int main()
         glfwPollEvents();
     }
     // shader.Unbind();
+    for (size_t i = 0; i < 4; i++) {
+        glDeleteVertexArrays(4, &VAO[i]);
+    }
 
-    glDeleteVertexArrays(2, &VAO[0]);
-    glDeleteVertexArrays(2, &VAO[1]);
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();

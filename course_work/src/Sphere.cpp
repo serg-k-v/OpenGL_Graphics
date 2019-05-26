@@ -12,6 +12,12 @@ Sphere::Sphere (glm::vec3 center, float radius, int sectors, int stack, bool mov
     this->sectors = sectors;
     this->stack = stack;
     this->movable = movable;
+
+    create_point();
+    create_indices();
+    create_normals();
+    join_data();
+
 }
 
 void Sphere::create_indices() {
