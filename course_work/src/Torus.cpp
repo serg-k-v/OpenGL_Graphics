@@ -28,7 +28,7 @@ Torus::Torus (glm::vec3 center, float sircl_radius, int sirc_sectors, float toru
 void Torus::create_indices() {
     int point_c = tor_sectors*sirc_sectors;
     for (size_t i = 0; i < point_c-1; i++) {
-        if ((i+1)%3==0)
+        if ((i+1)%sirc_sectors==0)
             i++;
         indices.push_back(i);
         indices.push_back(i+1);
@@ -65,13 +65,14 @@ void Torus::create_point() {
     for (size_t i = 0; i < (size_t)tor_sectors; i++) {
         for (size_t j = 0; j < (size_t)sirc_sectors; j++) {
 
-            float x = (torus_radius + crcl[3*j]*glm::cos( j * 2 * glm::pi<float>() / sirc_sectors)) * glm::cos( i * 2 * glm::pi<float>() / tor_sectors);
-            float y = crcl[3*j+1];
-            float z = (torus_radius + crcl[3*j+2]*glm::cos( j * 2 * glm::pi<float>() / sirc_sectors)) * glm::sin( i * 2 * glm::pi<float>() / tor_sectors);
-            std::cout << "i : " <<  i << ' ';
-            std::cout << "j : "  <<  j << ' ';
-            std::cout << "cos : " <<   glm::cos( i * 2 * glm::pi<float>() / tor_sectors) << ' ';
-            std::cout << "sin : " <<  glm::sin( i * 2 * glm::pi<float>() / tor_sectors) << '\n';
+            float x = (torus_radius + sircl_radius* glm::cos( j * 2 * glm::pi<float>() / sirc_sectors)) * glm::cos( i * 2 * glm::pi<float>() / tor_sectors);
+            float y =  sircl_radius * glm::sin( j * 2 * glm::pi<float>() / sirc_sectors);
+            float z = (torus_radius + sircl_radius * glm::cos( j * 2 * glm::pi<float>() / sirc_sectors)) * glm::sin( i * 2 * glm::pi<float>() / tor_sectors);
+
+            // std::cout << "i : " <<  i << ' ';
+            // std::cout << "j : "  << j << ' ';
+            // std::cout << "cos : " <<  glm::cos( i * 2 * glm::pi<float>() / tor_sectors) << ' ';
+            // std::cout << "sin : " <<  glm::sin( i * 2 * glm::pi<float>() / tor_sectors) << '\n';
             points.push_back(x);
             points.push_back(y);
             points.push_back(z);

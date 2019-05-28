@@ -78,7 +78,7 @@ int main()
     Cylinder* cylinder_2 = new Cylinder(glm::vec3(-1,0,0), 0.4, 0.3, 4); //c, r, h, s
     Sphere* sphere_2 = new Sphere(glm::vec3(1,0,0), 0.4, 10, 5);
 
-    Torus* torus = new Torus(glm::vec3(0,0,0), 0.2, 4, 0.8, 3);
+    Torus* torus = new Torus(glm::vec3(0,0,0), 0.2, 3, 0.8, 15);
     std::cout << "Torus points" << '\n';
     int k = 1;
     for (auto &el : torus->get_points()) {
