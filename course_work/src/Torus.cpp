@@ -32,20 +32,21 @@ void Torus::create_indices() {
             i++;
         indices.push_back(i);
         indices.push_back(i+1);
-        indices.push_back((i+4)%point_c);
+        indices.push_back((i+sirc_sectors+1)%point_c);
 
         indices.push_back(i);
-        indices.push_back((i+3)%point_c);
-        indices.push_back((i+4)%point_c);
+        indices.push_back((i+sirc_sectors)%point_c);
+        indices.push_back((i+sirc_sectors +1)%point_c);
     }
-    for (size_t i = 0; i < point_c; i+=3) {
-        indices.push_back(i+2);
-        indices.push_back(i);
-        indices.push_back((i+3)%point_c);
 
-        indices.push_back(i+2);
-        indices.push_back((i+5)%point_c);
-        indices.push_back((i+3)%point_c) ;
+    for (size_t i = 0; i < point_c; i+=sirc_sectors) {
+        indices.push_back(i + sirc_sectors -1);
+        indices.push_back(i);
+        indices.push_back((i+sirc_sectors)%point_c);
+
+        indices.push_back(i + sirc_sectors -1);
+        indices.push_back((i+2*sirc_sectors -1)%point_c);
+        indices.push_back((i+sirc_sectors)%point_c) ;
     }
 }
 

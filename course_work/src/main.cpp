@@ -77,24 +77,23 @@ int main()
     Sphere* sphere = new Sphere(glm::vec3(0,0.4,0), 0.4, 32, 16);
     Cylinder* cylinder_2 = new Cylinder(glm::vec3(-1,0,0), 0.4, 0.3, 4); //c, r, h, s
     Sphere* sphere_2 = new Sphere(glm::vec3(1,0,0), 0.4, 10, 5);
-
-    Torus* torus = new Torus(glm::vec3(0,0,0), 0.2, 3, 0.8, 15);
-    std::cout << "Torus points" << '\n';
-    int k = 1;
-    for (auto &el : torus->get_points()) {
-        std::cout << el << ' ';
-        if(k%3 == 0)
-            std::cout << '\n';
-        k++;
-    }
-    std::cout << "Torus indices" << '\n';
-    int j = 1;
-    for (auto &el : torus->get_indices()) {
-        std::cout << el << ' ';
-        if(j%3 == 0)
-            std::cout << '\n';
-        j++;
-    }
+    Torus* torus = new Torus(glm::vec3(0,0,0), 0.2, 10, 0.8, 26);
+    // std::cout << "Torus points" << '\n';
+    // int k = 1;
+    // for (auto &el : torus->get_points()) {
+    //     std::cout << el << ' ';
+    //     if(k%3 == 0)
+    //         std::cout << '\n';
+    //     k++;
+    // }
+    // std::cout << "Torus indices" << '\n';
+    // int j = 1;
+    // for (auto &el : torus->get_indices()) {
+    //     std::cout << el << ' ';
+    //     if(j%3 == 0)
+    //         std::cout << '\n';
+    //     j++;
+    // }
 
     std::cout << '\n';
 
