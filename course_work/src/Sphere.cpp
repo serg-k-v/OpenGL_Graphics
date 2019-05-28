@@ -30,8 +30,7 @@ void Sphere::create_indices() {
         {
             // 2 triangles per sector excluding first and last stacks
             // k1 => k2 => k1+1
-            if(i != 0)
-            {
+            if(i != 0){
                 indices.push_back(k1);
                 indices.push_back(k2);
                 indices.push_back(k1 + 1);
@@ -64,7 +63,6 @@ void Sphere::create_point() {
         {
             sectorAngle = j * sectorStep;           // starting from 0 to 2pi
 
-            // vertex position (x, y, z)
             x = center.x +  xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
             y = center.y + xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
             points.push_back(x);

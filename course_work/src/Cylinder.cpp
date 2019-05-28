@@ -62,8 +62,6 @@ void Cylinder::create_normals() {
     for (size_t i = 0; i < points.size()/3; i++) {
         glm::vec3 v(points[3*i],   points[3*i+1],   points[3*i+2]);
         glm::vec3 res = v - center;
-        // std::cout << "res : " << res.x << ' ' << res.y << ' '  << res.z << '\n'
-        //           << "coords : " << points[3*indices[3*i]] << ' ' << points[3*indices[3*i]+1] << ' '  << points[3*indices[3*i]+2] << '\n';
         normals.insert(normals.end(), glm::value_ptr(res), glm::value_ptr(res)+3);
     }
 }

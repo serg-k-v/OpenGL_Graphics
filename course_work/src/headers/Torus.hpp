@@ -14,6 +14,7 @@ private:
     int   sirc_sectors;
     float torus_radius;
     int   tor_sectors;
+    bool  half    = false;
     bool  movable = false;
 
     Circle* circle;
@@ -23,8 +24,10 @@ private:
     std::vector<float>  norm_and_point;
 
 public:
-    Torus (glm::vec3 center, float sircl_radius, int sirc_sectors, float torus_radius, float tor_sectors, bool movable=false);
-    ~Torus ();
+    Torus (glm::vec3 center, float sircl_radius, int sirc_sectors,
+                             float torus_radius, float tor_sectors,
+                             bool half =false, bool movable=false);
+    ~Torus (){};
 
     const std::vector<int> &get_indices() const {return indices;}
     const std::vector<float> &get_points() const {return points;}

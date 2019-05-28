@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <array>
 
 #include "headers/Circle.hpp"
 #include "headers/Cylinder.hpp"
@@ -73,11 +74,11 @@ int main()
 
 
     // ------------------------------------------------------------------
-    Cylinder* cylinder = new Cylinder(glm::vec3(0,0,0), 0.4, 0.3, 20); //c, r, h, s
+    Cylinder* cylinder = new Cylinder(glm::vec3(0,-0.8,0), 0.4, 0.3, 20); //c, r, h, s
     Sphere* sphere = new Sphere(glm::vec3(0,0.4,0), 0.4, 32, 16);
-    Cylinder* cylinder_2 = new Cylinder(glm::vec3(-1,0,0), 0.4, 0.3, 4); //c, r, h, s
-    Sphere* sphere_2 = new Sphere(glm::vec3(1,0,0), 0.4, 10, 5);
-    Torus* torus = new Torus(glm::vec3(0,0,0), 0.2, 10, 0.8, 26);
+    // Cylinder* cylinder_2 = new Cylinder(glm::vec3(-1,0,0), 0.4, 0.3, 4); //c, r, h, s
+    // Sphere* sphere_2 = new Sphere(glm::vec3(1,0,0), 0.4, 10, 5);
+    Torus* torus = new Torus(glm::vec3(0,0,0), 0.05, 10, 0.8, 26);
     // std::cout << "Torus points" << '\n';
     // int k = 1;
     // for (auto &el : torus->get_points()) {
@@ -100,29 +101,33 @@ int main()
     Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
 
+    const int n = 2;
+    std::array<std::vector<float>, n> arr_vb = {torus->get_n_p(), cylinder->get_n_p()};
 
-    std::vector<float> arr_vb[1]={torus->get_points()};
-    std::vector<int> arr_ib[1]={torus->get_indices()};
+    std::array<std::vector<int>, n>   arr_ib = {torus->get_indices(), cylinder->get_indices()};
 
-    unsigned int VAO[1], VBO[1], IBO[1];
-    for (size_t i = 0; i < 1; i++) {
-        glGenVertexArrays(1, &VAO[i]);
+    unsigned int *VAO = new unsigned int[n];
+    unsigned int *VBO = new unsigned int[n];
+    unsigned int *IBO = new unsigned int[n];
+
+    for (size_t i = 0; i < n; i++) {
+        glGenVertexArrays(n, &VAO[i]);
         glBindVertexArray(VAO[i]);
 
-        glGenBuffers(1, &VBO[i]);
+        glGenBuffers(n, &VBO[i]);
         glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
         glBufferData(GL_ARRAY_BUFFER, arr_vb[i].size()*sizeof(float), arr_vb[i].data(), GL_STATIC_DRAW);
         // VertexBuffer vb(arr_vb[i].data(), arr_vb[i].size()*sizeof(float));
-        glGenBuffers(1, &IBO[i]);
+        glGenBuffers(n, &IBO[i]);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO[i]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, arr_ib[i].size()*sizeof(int), arr_ib[i].data(), GL_STATIC_DRAW);
         // IndexBuffer ib(arr_ib[i].data(), arr_ib[i].size());
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
-        // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
-        // glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
+        glEnableVertexAttribArray(1);
     }
 
     // render loop
@@ -148,7 +153,7 @@ int main()
         // shader.SetVec3("viewPos", camera.Position);
         shader.Bind();
 
-        for (size_t i = 0; i < 1; i++) {
+        for (size_t i = 0; i < n; i++) {
             glBindVertexArray(VAO[i]);
             glDrawElements(GL_TRIANGLES, arr_ib[i].size(), GL_UNSIGNED_INT, 0);
         }
@@ -159,8 +164,8 @@ int main()
         glfwPollEvents();
     }
     // shader.Unbind();
-    for (size_t i = 0; i < 4; i++) {
-        glDeleteVertexArrays(4, &VAO[i]);
+    for (size_t i = 0; i < n; i++) {
+        glDeleteVertexArrays(n, &VAO[i]);
     }
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
