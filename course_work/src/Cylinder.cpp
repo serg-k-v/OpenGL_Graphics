@@ -20,9 +20,6 @@ Cylinder::Cylinder (glm::vec3 center, float radius, float height, int sectors, b
 
     create_point();
     create_indices();
-    create_normals();
-    join_data();
-
 }
 
 void Cylinder::create_indices() {

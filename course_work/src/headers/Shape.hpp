@@ -9,8 +9,11 @@
 #include <functional>
 
 class Shape {
-private:
-
+protected:
+    std::vector<int>  indices;
+    std::vector<float>  points;
+    std::vector<float>  normals;
+    glm::vec3 center;
 public:
     Shape (){}
     virtual ~Shape (){}
@@ -18,28 +21,55 @@ public:
     virtual void create_indices() = 0;
     virtual void create_normals() = 0;
 
-    std::vector<float> rotate(const char axis, const float angle, std::vector<float> v) {
-        std::vector<float> res;
-        for (size_t i = 0; i < v.size()/3; i++) {
+    const std::vector<int> &get_indices() const {return indices;}
+    const std::vector<float> &get_points() const {return points;}
+    const std::vector<float> &get_normals() const {return normals;}
+
+    // std::vector<float> rotate(const char axis, const float angle, std::vector<float> v) {
+    //     std::vector<float> res;
+    //     for (size_t i = 0; i < v.size()/3; i++) {
+    //         switch (axis) {
+    //             case 'x':{
+    //                 auto tmp = glm::rotateX(glm::vec3(v[3*i], v[3*i+1], v[3*i+2]), angle);
+    //                 res.insert(res.end(), glm::value_ptr(tmp), glm::value_ptr(tmp)+3);}
+    //                 break;
+    //             case 'y':{
+    //                 auto tmp = glm::rotateY(glm::vec3(v[3*i], v[3*i+1], v[3*i+2]), angle);
+    //                 res.insert(res.end(), glm::value_ptr(tmp), glm::value_ptr(tmp)+3);}
+    //                 break;
+    //             case 'z':{
+    //                 auto tmp = glm::rotateZ(glm::vec3(v[3*i], v[3*i+1], v[3*i+2]), angle);
+    //                 res.insert(res.end(), glm::value_ptr(tmp), glm::value_ptr(tmp)+3);}
+    //                 break;
+    //             default :{
+    //                 std::cout << "Incorrect input data!, must be x, y, or z!" << '\n';}
+    //                 break;
+    //         }
+    //     }
+    //     return res;
+    // }
+
+    void rotate(const char axis, const float angle) {
+        for (auto it = points.begin(); it < points.end(); it+=3) {
+            glm::vec3 tmp;
             switch (axis) {
                 case 'x':{
-                    auto tmp = glm::rotateX(glm::vec3(v[3*i], v[3*i+1], v[3*i+2]), angle);
-                    res.insert(res.end(), glm::value_ptr(tmp), glm::value_ptr(tmp)+3);}
+                    tmp = glm::rotateX(glm::vec3(*it, *(it+1), *(it+2)), angle);}
                     break;
                 case 'y':{
-                    auto tmp = glm::rotateY(glm::vec3(v[3*i], v[3*i+1], v[3*i+2]), angle);
-                    res.insert(res.end(), glm::value_ptr(tmp), glm::value_ptr(tmp)+3);}
+                    tmp = glm::rotateY(glm::vec3(*it, *(it+1), *(it+2)), angle);}
                     break;
                 case 'z':{
-                    auto tmp = glm::rotateZ(glm::vec3(v[3*i], v[3*i+1], v[3*i+2]), angle);
-                    res.insert(res.end(), glm::value_ptr(tmp), glm::value_ptr(tmp)+3);}
+                    tmp = glm::rotateZ(glm::vec3(*it, *(it+1), *(it+2)), angle);}
                     break;
                 default :{
                     std::cout << "Incorrect input data!, must be x, y, or z!" << '\n';}
                     break;
             }
+            *it = tmp.x;
+            *(it+1) = tmp.y;
+            *(it+2) = tmp.z;
         }
-        return res;
     }
 };
 

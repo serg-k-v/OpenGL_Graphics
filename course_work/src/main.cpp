@@ -74,11 +74,28 @@ int main()
 
 
     // ------------------------------------------------------------------
-    Cylinder* cylinder = new Cylinder(glm::vec3(0,-0.8,0), 0.4, 0.3, 20); //c, r, h, s
-    Sphere* sphere = new Sphere(glm::vec3(0,0.4,0), 0.4, 32, 16);
-    // Cylinder* cylinder_2 = new Cylinder(glm::vec3(-1,0,0), 0.4, 0.3, 4); //c, r, h, s
-    // Sphere* sphere_2 = new Sphere(glm::vec3(1,0,0), 0.4, 10, 5);
-    Torus* torus = new Torus(glm::vec3(0,0,0), 0.05, 10, 0.8, 26);
+    Cylinder* cylinder_basis_1 = new Cylinder(glm::vec3(0,-1.3,0), 0.7, 0.2, 25); //c, r, h, s
+    cylinder_basis_1->create_normals();
+    cylinder_basis_1->join_data();
+    Cylinder* cylinder_basis_2 = new Cylinder(glm::vec3(0,-1.1,0), 0.2, 0.2, 25);
+    cylinder_basis_2->create_normals();
+    cylinder_basis_2->join_data();
+    Torus*    torus_basis = new Torus(glm::vec3(0,0,0), 0.05, 15, 1.1, 36, true); //c, r, s1, R, s2, half
+    torus_basis->rotate('x', glm::pi<float>());
+    torus_basis->create_normals();
+    torus_basis->join_data();
+    Cylinder* cylinder_basis_l = new Cylinder(glm::vec3(-1.1,0,0), 0.1, 0.2, 25);
+    cylinder_basis_l->rotate('x', glm::pi<float>()/2);
+    // cylinder_basis_l->rotate('x', glm::pi<float>()/2);
+    cylinder_basis_l->create_normals();
+    cylinder_basis_l->join_data();
+    Cylinder* cylinder_basis_r = new Cylinder(glm::vec3(1.1,0,0),  0.1, 0.2, 25);
+    cylinder_basis_r->rotate('x', glm::pi<float>()/2);
+    // cylinder_basis_r->rotate('x', glm::pi<float>()/2);
+    cylinder_basis_r->create_normals();
+    cylinder_basis_r->join_data();
+
+    // Sphere* sphere = new Sphere(glm::vec3(0,0.4,0), 0.4, 32, 16);
     // std::cout << "Torus points" << '\n';
     // int k = 1;
     // for (auto &el : torus->get_points()) {
@@ -101,10 +118,18 @@ int main()
     Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
 
-    const int n = 2;
-    std::array<std::vector<float>, n> arr_vb = {torus->get_n_p(), cylinder->get_n_p()};
+    const int n = 5;
+    std::array<std::vector<float>, n> arr_vb = {torus_basis->get_n_p(),
+                                                cylinder_basis_1->get_n_p(),
+                                                cylinder_basis_2->get_n_p(),
+                                                cylinder_basis_l->get_n_p(),
+                                                cylinder_basis_r->get_n_p()};
 
-    std::array<std::vector<int>, n>   arr_ib = {torus->get_indices(), cylinder->get_indices()};
+    std::array<std::vector<int>, n>   arr_ib = {torus_basis->get_indices(),
+                                                cylinder_basis_1->get_indices(),
+                                                cylinder_basis_2->get_indices(),
+                                                cylinder_basis_l->get_indices(),
+                                                cylinder_basis_r->get_indices()};
 
     unsigned int *VAO = new unsigned int[n];
     unsigned int *VBO = new unsigned int[n];

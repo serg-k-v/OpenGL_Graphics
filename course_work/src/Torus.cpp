@@ -7,7 +7,9 @@
 #include <iostream>
 
 
-Torus::Torus (glm::vec3 center, float sircl_radius, int sirc_sectors, float torus_radius, float tor_sectors, bool half, bool movable):Shape() {
+Torus::Torus (glm::vec3 center, float sircl_radius, int sirc_sectors,
+                                float torus_radius, float tor_sectors,
+                                bool half, bool movable):Shape() {
     this->center = center;
     this->sircl_radius = sircl_radius;
     this->sirc_sectors = sirc_sectors;
@@ -18,8 +20,6 @@ Torus::Torus (glm::vec3 center, float sircl_radius, int sirc_sectors, float toru
 
     create_point();
     create_indices();
-    create_normals();
-    join_data();
 }
 
 void Torus::create_indices() {
@@ -54,9 +54,9 @@ void Torus::create_point() {
 
             float x = (torus_radius + sircl_radius* glm::cos( j * 2 * glm::pi<float>() / sirc_sectors))
             * glm::cos( i * ( half ? 1 : 2) * glm::pi<float>() / tor_sectors);
-            float y =  sircl_radius * glm::sin( j * 2 * glm::pi<float>() / sirc_sectors);
-            float z = (torus_radius + sircl_radius * glm::cos( j * 2 * glm::pi<float>() / sirc_sectors))
+            float y =  (torus_radius + sircl_radius * glm::cos( j * 2 * glm::pi<float>() / sirc_sectors))
             * glm::sin( i * ( half ? 1 : 2) * glm::pi<float>() / tor_sectors);
+            float z = sircl_radius * glm::sin( j * 2 * glm::pi<float>() / sirc_sectors);
 
             points.push_back(x);
             points.push_back(y);

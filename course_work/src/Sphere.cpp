@@ -15,9 +15,6 @@ Sphere::Sphere (glm::vec3 center, float radius, int sectors, int stack, bool mov
 
     create_point();
     create_indices();
-    create_normals();
-    join_data();
-
 }
 
 void Sphere::create_indices() {
