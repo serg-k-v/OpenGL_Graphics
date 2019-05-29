@@ -6,8 +6,8 @@
 #include <iostream>
 // #include <typeinfo>
 
-Cylinder::Cylinder (glm::vec3 center, float radius, float height, int sectors, bool movable):Shape() {
-    this->center = center;
+Cylinder::Cylinder (glm::vec3 center, float radius, float height, int sectors, bool movable):Shape(center){
+    // this->center = center;
     this->radius = radius;
     this->height = height;
     this->sectors = sectors;
@@ -39,7 +39,7 @@ Cylinder::~Cylinder() {
 
 void Cylinder::create_point() {
     circle->create_point();
-    std::vector<float> tmp(circle->get_points());
+    std::vector<float> tmp = circle->get_points();
     for (size_t i = 1; i < (size_t)sectors+1; i++) {
 
         // std::cout << "y+ = " << tmp[3*i+1] << '\n';
@@ -52,7 +52,6 @@ void Cylinder::create_point() {
         points.push_back(tmp[3*i+1]-height/2);
         points.push_back(tmp[3*i+2]);
     }
-
 }
 
 void Cylinder::create_normals() {

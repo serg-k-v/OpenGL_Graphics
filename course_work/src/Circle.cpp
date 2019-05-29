@@ -6,8 +6,8 @@
 #include <iostream>
 // #include <typeinfo>
 
-Circle::Circle (glm::vec3 center, float radius, int sectors, bool movable):Shape() {
-    this->center = center;
+Circle::Circle (glm::vec3 center, float radius, int sectors, bool movable):Shape(center) {
+    // this->center = center;
     this->radius = radius;
     this->sectors = sectors;
     this->movable = movable;

@@ -9,11 +9,11 @@
 
 class Cylinder : public Shape {
 private:
-    glm::vec3 center;
+    // glm::vec3 center;
     float radius;
     float height;
     int sectors;
-    bool movable = false;
+    bool movable;
 
     Circle* circle;
     // std::vector<int>  indices;

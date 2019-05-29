@@ -6,8 +6,8 @@
 #include <iostream>
 // #include <typeinfo>
 
-Sphere::Sphere (glm::vec3 center, float radius, int sectors, int stack, bool movable):Shape() {
-    this->center = center;
+Sphere::Sphere (glm::vec3 center, float radius, int sectors, int stack, bool movable):Shape(center) {
+    // this->center = center;
     this->radius = radius;
     this->sectors = sectors;
     this->stack = stack;

@@ -9,8 +9,8 @@
 
 Torus::Torus (glm::vec3 center, float sircl_radius, int sirc_sectors,
                                 float torus_radius, float tor_sectors,
-                                bool half, bool movable):Shape() {
-    this->center = center;
+                                bool half, bool movable):Shape(center) {
+    // this->center = center;
     this->sircl_radius = sircl_radius;
     this->sirc_sectors = sirc_sectors;
     this->torus_radius = torus_radius;

@@ -6,7 +6,7 @@
 
 class Sphere : public Shape {
 private:
-    glm::vec3 center;
+    // glm::vec3 center;
     float radius;
     int sectors;
     int stack;

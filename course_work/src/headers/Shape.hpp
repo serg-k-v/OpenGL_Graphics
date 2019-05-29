@@ -10,12 +10,12 @@
 
 class Shape {
 protected:
+    glm::vec3 center;
     std::vector<int>  indices;
     std::vector<float>  points;
     std::vector<float>  normals;
-    glm::vec3 center;
 public:
-    Shape (){}
+    Shape (glm::vec3 center = glm::vec3(0, 0, 0)):center(center){}
     virtual ~Shape (){}
     virtual void create_point() = 0;
     virtual void create_indices() = 0;
@@ -50,25 +50,25 @@ public:
     // }
 
     void rotate(const char axis, const float angle) {
-        for (auto it = points.begin(); it < points.end(); it+=3) {
+        for (auto it = points.begin(); it <= points.end()-3; it+=3) {
             glm::vec3 tmp;
             switch (axis) {
                 case 'x':{
-                    tmp = glm::rotateX(glm::vec3(*it, *(it+1), *(it+2)), angle);}
+                    tmp = glm::rotateX(glm::vec3(*it - center.x, *(it+1) - center.y, *(it+2)) - center.z, angle);}
                     break;
                 case 'y':{
-                    tmp = glm::rotateY(glm::vec3(*it, *(it+1), *(it+2)), angle);}
+                    tmp = glm::rotateY(glm::vec3(*it - center.x, *(it+1) - center.y, *(it+2)) - center.z, angle);}
                     break;
                 case 'z':{
-                    tmp = glm::rotateZ(glm::vec3(*it, *(it+1), *(it+2)), angle);}
+                    tmp = glm::rotateZ(glm::vec3(*it - center.x, *(it+1) - center.y, *(it+2)) - center.z, angle);}
                     break;
                 default :{
                     std::cout << "Incorrect input data!, must be x, y, or z!" << '\n';}
                     break;
             }
-            *it = tmp.x;
-            *(it+1) = tmp.y;
-            *(it+2) = tmp.z;
+            *it = tmp.x + center.x;
+            *(it+1) = tmp.y + center.y;
+            *(it+2) = tmp.z + center.z;
         }
     }
 };
