@@ -84,20 +84,22 @@ int main()
     torus_basis->rotate('x', glm::pi<float>());
     torus_basis->create_normals();
     torus_basis->join_data();
-    // Torus*    torus_full_1 = new Torus(glm::vec3(0,0,0), 0.05, 15, 0.9, 36); //c, r, s1, R, s2, half
-    // torus_full_1->create_normals();
-    // torus_full_1->join_data();
 
-    // Cylinder* cylinder_basis_l = new Cylinder(glm::vec3(-1.1,0,0), 0.1, 0.2, 25);
-    // cylinder_basis_l->rotate('x', glm::pi<float>()/2);
-    // cylinder_basis_l->rotate('y', glm::pi<float>()/2);
-    // cylinder_basis_l->create_normals();
-    // cylinder_basis_l->join_data();
-    // Cylinder* cylinder_basis_r = new Cylinder(glm::vec3(1.1,0,0),  0.1, 0.2, 25);
-    // // cylinder_basis_r->rotate('x', glm::pi<float>()/2);
-    // // cylinder_basis_r->rotate('y', glm::pi<float>()/2);
-    // cylinder_basis_r->create_normals();
-    // cylinder_basis_r->join_data();
+
+    Torus*    torus_full_1 = new Torus(glm::vec3(0,0,0), 0.025, 15, 0.9, 36); //c, r, s1, R, s2, half
+    torus_full_1->create_normals();
+    torus_full_1->join_data();
+
+    Cylinder* cylinder_basis_l = new Cylinder(glm::vec3(-1.1,0,0), 0.1, 0.2, 25);
+    cylinder_basis_l->rotate('x', glm::pi<float>()/2);
+    cylinder_basis_l->rotate('y', glm::pi<float>()/2);
+    cylinder_basis_l->create_normals();
+    cylinder_basis_l->join_data();
+    Cylinder* cylinder_basis_r = new Cylinder(glm::vec3(1.1,0,0),  0.1, 0.2, 25);
+    cylinder_basis_r->rotate('x', glm::pi<float>()/2);
+    cylinder_basis_r->rotate('y', glm::pi<float>()/2);
+    cylinder_basis_r->create_normals();
+    cylinder_basis_r->join_data();
 
     // Sphere* sphere = new Sphere(glm::vec3(0,0.4,0), 0.4, 32, 16);
     // std::cout << "Torus points" << '\n';
@@ -124,22 +126,17 @@ int main()
 
     std::vector<std::vector<float>> arr_vb = {cylinder_basis_1->get_n_p(),
                                                 cylinder_basis_2->get_n_p(),
-                                                torus_basis->get_n_p()/*,
-                                                torus_full_1->get_n_p()/*,
-                                                cylinder_basis_l->get_n_p()/*,
-                                                cylinder_basis_r->get_n_p()*/};
+                                                torus_basis->get_n_p(),
+                                                torus_full_1->get_n_p(),
+                                                cylinder_basis_l->get_n_p(),
+                                                cylinder_basis_r->get_n_p()};
 
     std::vector<std::vector<int>>   arr_ib = {cylinder_basis_1->get_indices(),
                                                 cylinder_basis_2->get_indices(),
-                                                torus_basis->get_indices()/*,
-                                                torus_full_1->get_indices()/*,
-                                                cylinder_basis_l->get_indices()/*,
-                                                cylinder_basis_r->get_indices()*/};
-
-    delete cylinder_basis_1;
-    delete cylinder_basis_2;
-    delete torus_basis;
-    // delete torus_full_1;
+                                                torus_basis->get_indices(),
+                                                torus_full_1->get_indices(),
+                                                cylinder_basis_l->get_indices(),
+                                                cylinder_basis_r->get_indices()};
 
     const size_t n = arr_vb.size();
     unsigned int *VAO = new unsigned int[n];
