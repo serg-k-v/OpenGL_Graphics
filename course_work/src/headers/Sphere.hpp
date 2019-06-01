@@ -29,6 +29,8 @@ public:
     void create_point();
     void create_normals();
     void join_data();
+    
+    void rotate(const char axis, const float angle);
 };
 
 #endif

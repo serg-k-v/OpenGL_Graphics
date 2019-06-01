@@ -116,3 +116,26 @@ void Sphere::join_data() {
         normals_it+=3;
     }
 }
+
+void Sphere::rotate(const char axis, const float angle) {
+    for (auto it = points.begin(); it <= points.end()-3; it+=3) {
+        glm::vec3 tmp;
+        switch (axis) {
+            case 'x':{
+                tmp = glm::rotateX(glm::vec3(*it, *(it+1), *(it+2)), angle);}
+                break;
+            case 'y':{
+                tmp = glm::rotateY(glm::vec3(*it, *(it+1), *(it+2)), angle);}
+                break;
+            case 'z':{
+                tmp = glm::rotateZ(glm::vec3(*it, *(it+1), *(it+2)), angle);}
+                break;
+            default :{
+                std::cout << "Incorrect input data!, must be x, y, or z!" << '\n';}
+                break;
+        }
+        *it = tmp.x;
+        *(it+1) = tmp.y;
+        *(it+2) = tmp.z;
+    }
+}

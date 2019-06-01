@@ -49,7 +49,7 @@ public:
     //     return res;
     // }
 
-    void rotate(const char axis, const float angle) {
+    virtual void rotate(const char axis, const float angle) {
         for (auto it = points.begin(); it <= points.end()-3; it+=3) {
             glm::vec3 tmp;
             switch (axis) {
