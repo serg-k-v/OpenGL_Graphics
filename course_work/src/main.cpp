@@ -176,7 +176,6 @@ int main()
     Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
 
-
     std::vector<std::vector<float>> arr_vb = {cylinder_basis_1->get_n_p(),
                                                 cylinder_basis_2->get_n_p(),
                                                 torus_basis->get_n_p(),
@@ -237,6 +236,36 @@ int main()
         glEnableVertexAttribArray(1);
     }
 
+    Cylinder*   sphere_test = new Cylinder(glm::vec3(0,0,1), 0.5, 1, 25);
+    sphere_test->create_normals();
+    sphere_test->join_data();
+
+    unsigned int tets_VAO;
+    unsigned int tets_VBO;
+    unsigned int tets_IBO;
+
+    Shader test_shader("./src/shaders/Basic.glsl");
+    test_shader.Bind();
+
+    glGenVertexArrays(1, &tets_VAO);
+    glBindVertexArray(tets_VAO);
+    //
+    // glGenBuffers(1, &tets_VBO);
+    // glBindBuffer(GL_ARRAY_BUFFER, tets_VBO);
+    // glBufferData(GL_ARRAY_BUFFER,sphere_test->get_points().size()*sizeof(float), sphere_test->get_points().data(), GL_STATIC_DRAW);
+    VertexBuffer vb(sphere_test->get_points().data(), sphere_test->get_points().size()*sizeof(float));
+    // glGenBuffers(1, &tets_IBO);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tets_IBO);
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sphere_test->get_indices().size()*sizeof(int), sphere_test->get_indices().data(), GL_STATIC_DRAW);
+    IndexBuffer ib(sphere_test->get_indices().data(), sphere_test->get_indices().size());
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
+    glEnableVertexAttribArray(1);
+
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -258,12 +287,19 @@ int main()
         shader.SetMat4("projection", projection);
         shader.SetMat4("view", view);
         // shader.SetVec3("viewPos", camera.Position);
-        shader.Bind();
 
+        // shader.Bind(); //????????????????????????????
         for (size_t i = 0; i < n; i++) {
             glBindVertexArray(VAO[i]);
             glDrawElements(GL_TRIANGLES, arr_ib[i].size(), GL_UNSIGNED_INT, 0);
         }
+
+
+        // test_shader.Bind();
+        glBindVertexArray(tets_VAO);
+        vb.Bind();
+        ib.Bind();
+        glDrawElements(GL_TRIANGLES, sphere_test->get_indices().size(), GL_UNSIGNED_INT, 0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
