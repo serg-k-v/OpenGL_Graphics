@@ -74,86 +74,13 @@ int main()
 
 
     // ------------------------------------------------------------------
-    Cylinder* cylinder_basis_1 = new Cylinder(glm::vec3(0,-1.3,0), 0.7, 0.2, 25); //c, r, h, s
-    cylinder_basis_1->create_normals();
-    cylinder_basis_1->join_data();
-    Cylinder* cylinder_basis_2 = new Cylinder(glm::vec3(0,-1.1,0), 0.2, 0.2, 25);
-    cylinder_basis_2->create_normals();
-    cylinder_basis_2->join_data();
-    Torus*    torus_basis = new Torus(glm::vec3(0,0,0), 0.05, 15, 1.1, 36, true); //c, r, s1, R, s2, half
-    torus_basis->rotate('x', glm::pi<float>());
-    torus_basis->create_normals();
-    torus_basis->join_data();
-
     Torus*    torus_full_1 = new Torus(glm::vec3(0,0,0), 0.025, 15, 0.9, 36); //c, r, s1, R, s2, half
     torus_full_1->create_normals();
     torus_full_1->join_data();
 
-    Cylinder* cylinder_basis_l = new Cylinder(glm::vec3(-1.1,0,0), 0.1, 0.2, 25);
-    cylinder_basis_l->rotate('x', glm::pi<float>()/2);
-    cylinder_basis_l->rotate('y', glm::pi<float>()/2);
-    cylinder_basis_l->create_normals();
-    cylinder_basis_l->join_data();
-
-    Cylinder* cylinder_basis_r = new Cylinder(glm::vec3(1.1,0,0),  0.1, 0.2, 25);
-    cylinder_basis_r->rotate('x', glm::pi<float>()/2);
-    cylinder_basis_r->rotate('y', glm::pi<float>()/2);
-    cylinder_basis_r->create_normals();
-    cylinder_basis_r->join_data();
-
-    Cylinder* cylinder_rot_r = new Cylinder(glm::vec3(1.0,0,0), 0.025, 0.2, 25);
-    cylinder_rot_r->rotate('x', glm::pi<float>()/2);
-    cylinder_rot_r->rotate('y', glm::pi<float>()/2);
-    cylinder_rot_r->create_normals();
-    cylinder_rot_r->join_data();
-
-    Cylinder* cylinder_rot_l = new Cylinder(glm::vec3(-1.0,0,0), 0.025, 0.2, 25);
-    cylinder_rot_l->rotate('x', glm::pi<float>()/2);
-    cylinder_rot_l->rotate('y', glm::pi<float>()/2);
-    cylinder_rot_l->create_normals();
-    cylinder_rot_l->join_data();
-
-    Torus*    torus_full_2_1 = new Torus(glm::vec3(0,0,0), 0.025, 15, 0.6, 36); //c, r, s1, R, s2, half
-    torus_full_2_1->create_normals();
-    torus_full_2_1->join_data();
-
-    Torus*    torus_full_2_2 = new Torus(glm::vec3(0,0,0), 0.025, 15, 0.6, 36); //c, r, s1, R, s2, half
-    torus_full_2_2->rotate('x', glm::pi<float>()/4);
-    torus_full_2_2->rotate('y', glm::pi<float>()/2);
-    torus_full_2_2->create_normals();
-    torus_full_2_2->join_data();
-
     Sphere*   sphere_base = new Sphere(glm::vec3(0,0,0), 0.2, 32, 16);
     sphere_base->create_normals();
     sphere_base->join_data();
-
-    Cylinder* cylinder_rot_big = new Cylinder(glm::vec3(0.0,0,0), 0.02, 1.8, 25);
-    cylinder_rot_big->rotate('z', glm::pi<float>()/4);
-    cylinder_rot_big->create_normals();
-    cylinder_rot_big->join_data();
-
-    Cylinder* cylinder_rot_small = new Cylinder(glm::vec3(0.0,0,0), 0.02, 1.2, 25);
-    cylinder_rot_small->rotate('x', glm::pi<float>()/4);
-    cylinder_rot_small->rotate('y', glm::pi<float>()/2);
-    cylinder_rot_small->create_normals();
-    cylinder_rot_small->join_data();
-
-
-    Sphere*   sphere_add_1 = new Sphere(glm::vec3(0,1,0), 0.1, 32, 16);
-    sphere_add_1->create_normals();
-    sphere_add_1->join_data();
-
-    Sphere*   sphere_add_2_1 = new Sphere(glm::vec3(0,0.6,0), 0.07, 32, 16);
-    sphere_add_2_1->rotate('z', -glm::pi<float>()/4);
-    sphere_add_2_1->create_normals();
-    sphere_add_2_1->join_data();
-
-    Sphere*   sphere_add_2_2 = new Sphere(glm::vec3(0,-0.6,0), 0.07, 32, 16);
-    sphere_add_2_2->rotate('z', -glm::pi<float>()/4);
-    sphere_add_2_2->create_normals();
-    sphere_add_2_2->join_data();
-
-
 
     // std::cout << "Torus points" << '\n';
     // int k = 1;
@@ -176,39 +103,10 @@ int main()
     Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
 
-    std::vector<std::vector<float>> arr_vb = {cylinder_basis_1->get_n_p(),
-                                                cylinder_basis_2->get_n_p(),
-                                                torus_basis->get_n_p(),
-                                                torus_full_1->get_n_p(),
-                                                cylinder_basis_l->get_n_p(),
-                                                cylinder_basis_r->get_n_p(),
-                                                cylinder_rot_r->get_n_p(),
-                                                cylinder_rot_l->get_n_p(),
-                                                torus_full_2_1->get_n_p(),
-                                                torus_full_2_2->get_n_p(),
-                                                sphere_base->get_n_p(),
-                                                cylinder_rot_big->get_n_p(),
-                                                cylinder_rot_small->get_n_p(),
-                                                sphere_add_1->get_n_p(),
-                                                sphere_add_2_1->get_n_p(),
-                                                sphere_add_2_2->get_n_p()};
-
-    std::vector<std::vector<int>>   arr_ib = {cylinder_basis_1->get_indices(),
-                                                cylinder_basis_2->get_indices(),
-                                                torus_basis->get_indices(),
-                                                torus_full_1->get_indices(),
-                                                cylinder_basis_l->get_indices(),
-                                                cylinder_basis_r->get_indices(),
-                                                cylinder_rot_r->get_indices(),
-                                                cylinder_rot_l->get_indices(),
-                                                torus_full_2_1->get_indices(),
-                                                torus_full_2_2->get_indices(),
-                                                sphere_base->get_indices(),
-                                                cylinder_rot_big->get_indices(),
-                                                cylinder_rot_small->get_indices(),
-                                                sphere_add_1->get_indices(),
-                                                sphere_add_2_1->get_indices(),
-                                                sphere_add_2_2->get_indices()};
+    std::vector<std::vector<float>> arr_vb = {  torus_full_1->get_n_p(),
+                                                sphere_base->get_n_p()};
+    std::vector<std::vector<int>>   arr_ib = {  torus_full_1->get_indices(),
+                                                sphere_base->get_indices()};
 
     const size_t n = arr_vb.size();
     std::cout << "size : " << n << '\n';
@@ -223,11 +121,11 @@ int main()
         glGenBuffers(n, &VBO[i]);
         glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
         glBufferData(GL_ARRAY_BUFFER, arr_vb[i].size()*sizeof(float), arr_vb[i].data(), GL_STATIC_DRAW);
-        // VertexBuffer vb(arr_vb[i].data(), arr_vb[i].size()*sizeof(float));
+        // VBO[i] = VertexBuffer(arr_vb[i].data(), arr_vb[i].size()*sizeof(float)); //не работает!!1
         glGenBuffers(n, &IBO[i]);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO[i]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, arr_ib[i].size()*sizeof(int), arr_ib[i].data(), GL_STATIC_DRAW);
-        // IndexBuffer ib(arr_ib[i].data(), arr_ib[i].size());
+        // IBO[i] = IndexBuffer(arr_ib[i].data(), arr_ib[i].size()); //не работает!!1
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
@@ -236,28 +134,29 @@ int main()
         glEnableVertexAttribArray(1);
     }
 
-    Cylinder*   sphere_test = new Cylinder(glm::vec3(0,0,1), 0.5, 1, 25);
+    Cylinder*   sphere_test = new Cylinder(glm::vec3(0,0,1), 0.5, 1, 5);
     sphere_test->create_normals();
     sphere_test->join_data();
-
-    unsigned int tets_VAO;
-    unsigned int tets_VBO;
-    unsigned int tets_IBO;
 
     Shader test_shader("./src/shaders/Basic.glsl");
     test_shader.Bind();
 
-    glGenVertexArrays(1, &tets_VAO);
-    glBindVertexArray(tets_VAO);
+    unsigned int test_VAO;
+    unsigned int test_VBO;
+    unsigned int test_IBO;
+
+
+    glGenVertexArrays(1, &test_VAO);
+    glBindVertexArray(test_VAO);
     //
-    // glGenBuffers(1, &tets_VBO);
-    // glBindBuffer(GL_ARRAY_BUFFER, tets_VBO);
-    // glBufferData(GL_ARRAY_BUFFER,sphere_test->get_points().size()*sizeof(float), sphere_test->get_points().data(), GL_STATIC_DRAW);
-    VertexBuffer vb(sphere_test->get_points().data(), sphere_test->get_points().size()*sizeof(float));
-    // glGenBuffers(1, &tets_IBO);
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tets_IBO);
-    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sphere_test->get_indices().size()*sizeof(int), sphere_test->get_indices().data(), GL_STATIC_DRAW);
-    IndexBuffer ib(sphere_test->get_indices().data(), sphere_test->get_indices().size());
+    glGenBuffers(1, &test_VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, test_VBO);
+    glBufferData(GL_ARRAY_BUFFER,sphere_test->get_points().size()*sizeof(float), sphere_test->get_points().data(), GL_STATIC_DRAW);
+    // VertexBuffer vb(sphere_test->get_points().data(), sphere_test->get_points().size()*sizeof(float));
+    glGenBuffers(1, &test_IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, test_IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sphere_test->get_indices().size()*sizeof(int), sphere_test->get_indices().data(), GL_STATIC_DRAW);
+    // IndexBuffer ib(sphere_test->get_indices().data(), sphere_test->get_indices().size());
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -283,22 +182,23 @@ int main()
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
-
+        //
         shader.SetMat4("projection", projection);
         shader.SetMat4("view", view);
         // shader.SetVec3("viewPos", camera.Position);
 
-        // shader.Bind(); //????????????????????????????
+        shader.Bind(); //????????????????????????????
         for (size_t i = 0; i < n; i++) {
             glBindVertexArray(VAO[i]);
             glDrawElements(GL_TRIANGLES, arr_ib[i].size(), GL_UNSIGNED_INT, 0);
         }
 
+        test_shader.SetMat4("projection", projection);
+        test_shader.SetMat4("view", view);
+        // test_shader.SetVec3("viewPos", camera.Position);
 
-        // test_shader.Bind();
-        glBindVertexArray(tets_VAO);
-        vb.Bind();
-        ib.Bind();
+        test_shader.Bind();
+        glBindVertexArray(test_VAO);
         glDrawElements(GL_TRIANGLES, sphere_test->get_indices().size(), GL_UNSIGNED_INT, 0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -306,10 +206,10 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    shader.Unbind();
-    for (size_t i = 0; i < n; i++) {
-        glDeleteVertexArrays(n, &VAO[i]);
-    }
+    // shader.Unbind();
+    // for (size_t i = 0; i < n; i++) {
+    //     glDeleteVertexArrays(n, &VAO[i]);
+    // }
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
