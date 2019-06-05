@@ -6,7 +6,7 @@
 #include <iostream>
 // #include <typeinfo>
 
-Sphere::Sphere (glm::vec3 center, float radius, int sectors, int stack, bool movable):Shape(center) {
+Sphere::Sphere (float radius, int sectors, int stack, glm::vec3 center, glm::vec3 color, bool movable):Shape(center, color) {
     // this->center = center;
     this->radius = radius;
     this->sectors = sectors;
@@ -106,16 +106,16 @@ void Sphere::create_normals() {
 
 }
 
-void Sphere::join_data() {
-    auto points_it = points.begin();
-    auto normals_it = normals.begin();
-    for (size_t i = 0; i < points.size()/3; i++) {
-        norm_and_point.insert(norm_and_point.end(), points_it, points_it+3);
-        norm_and_point.insert(norm_and_point.end(), normals_it, normals_it+3);
-        points_it+=3;
-        normals_it+=3;
-    }
-}
+// void Sphere::join_data() {
+//     auto points_it = points.begin();
+//     auto normals_it = normals.begin();
+//     for (size_t i = 0; i < points.size()/3; i++) {
+//         norm_and_point.insert(norm_and_point.end(), points_it, points_it+3);
+//         norm_and_point.insert(norm_and_point.end(), normals_it, normals_it+3);
+//         points_it+=3;
+//         normals_it+=3;
+//     }
+// }
 
 void Sphere::rotate(const char axis, const float angle) {
     for (auto it = points.begin(); it <= points.end()-3; it+=3) {

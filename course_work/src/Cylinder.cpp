@@ -6,14 +6,16 @@
 #include <iostream>
 // #include <typeinfo>
 
-Cylinder::Cylinder (glm::vec3 center, float radius, float height, int sectors, bool movable):Shape(center){
+Cylinder::Cylinder (float radius, float height, int sectors,
+                    glm::vec3 center, glm::vec3 color,
+                    bool movable):Shape(center, color){
     // this->center = center;
     this->radius = radius;
     this->height = height;
     this->sectors = sectors;
     this->movable = movable;
     try{
-        this->circle = new Circle(center, radius, sectors);
+        this->circle = new Circle(radius, sectors, center, color);
     }catch(const std::bad_alloc& e){
         std::cout << "Allocation failed: " << e.what() << '\n';
     }
@@ -97,13 +99,13 @@ void Cylinder::create_normals() {
     normals.insert(normals.end(), glm::value_ptr(t2), glm::value_ptr(t2)+3);
 }
 
-void Cylinder::join_data() {
-    auto points_it = points.begin();
-    auto normals_it = normals.begin();
-    for (size_t i = 0; i < points.size()/3; i++) {
-        norm_and_point.insert(norm_and_point.end(), points_it, points_it+3);
-        norm_and_point.insert(norm_and_point.end(), normals_it, normals_it+3);
-        points_it+=3;
-        normals_it+=3;
-    }
-}
+// void Cylinder::join_data() {
+//     auto points_it = points.begin();
+//     auto normals_it = normals.begin();
+//     for (size_t i = 0; i < points.size()/3; i++) {
+//         norm_and_point.insert(norm_and_point.end(), points_it, points_it+3);
+//         norm_and_point.insert(norm_and_point.end(), normals_it, normals_it+3);
+//         points_it+=3;
+//         normals_it+=3;
+//     }
+// }

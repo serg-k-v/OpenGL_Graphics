@@ -7,9 +7,10 @@
 #include <iostream>
 
 
-Torus::Torus (glm::vec3 center, float sircl_radius, int sirc_sectors,
-                                float torus_radius, float tor_sectors,
-                                bool half, bool movable):Shape(center) {
+Torus::Torus (float sircl_radius, int sirc_sectors,
+                float torus_radius, float tor_sectors,
+                glm::vec3 center, glm::vec3 color,
+                bool half, bool movable):Shape(center, color) {
     // this->center = center;
     this->sircl_radius = sircl_radius;
     this->sirc_sectors = sirc_sectors;
@@ -75,13 +76,13 @@ void Torus::create_normals() {
     }
 }
 
-void Torus::join_data() {
-    auto points_it = points.begin();
-    auto normals_it = normals.begin();
-    for (size_t i = 0; i < points.size()/3; i++) {
-        norm_and_point.insert(norm_and_point.end(), points_it, points_it+3);
-        norm_and_point.insert(norm_and_point.end(), normals_it, normals_it+3);
-        points_it+=3;
-        normals_it+=3;
-    }
-}
+// void Torus::join_data() {
+//     auto points_it = points.begin();
+//     auto normals_it = normals.begin();
+//     for (size_t i = 0; i < points.size()/3; i++) {
+//         norm_and_point.insert(norm_and_point.end(), points_it, points_it+3);
+//         norm_and_point.insert(norm_and_point.end(), normals_it, normals_it+3);
+//         points_it+=3;
+//         normals_it+=3;
+//     }
+// }

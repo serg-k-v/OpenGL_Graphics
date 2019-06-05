@@ -19,10 +19,12 @@ private:
     // std::vector<int>  indices;
     // std::vector<float>  points;
     // std::vector<float>  normals;
-    std::vector<float>  norm_and_point;
+    // std::vector<float>  norm_and_point;
 
 public:
-    Cylinder (glm::vec3 center, float radius, float height, int sectors, bool movable=false);
+    Cylinder (float radius, float height, int sectors,
+              glm::vec3 center=glm::vec3(0, 0, 0),
+              glm::vec3 color=glm::vec3(1, 0.5, 0.2), bool movable=false);
     ~Cylinder();
     // const std::vector<int> &get_indices() const {return indices;}
     // const std::vector<float> &get_points() const {return points;}
@@ -31,7 +33,7 @@ public:
     void create_indices();
     void create_point();
     void create_normals();
-    void join_data();
+    // void join_data();
 };
 
 #endif

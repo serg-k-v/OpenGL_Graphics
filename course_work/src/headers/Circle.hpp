@@ -18,7 +18,9 @@ private:
     // std::vector<float>  normals;
 
 public:
-    Circle (glm::vec3 center, float radius, int sectors, bool movable=false);
+    Circle (float radius, int sectors,
+            glm::vec3 center = glm::vec3(0, 0, 0),
+            glm::vec3 color = glm::vec3(1, 0.5, 0.2), bool movable=false);
     // const std::vector<int> get_indices() const {return indices;}
     // const std::vector<float> get_points() const {return points;}
     // const std::vector<float> get_normals() const {return normals;}

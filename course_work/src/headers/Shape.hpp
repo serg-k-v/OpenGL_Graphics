@@ -11,11 +11,13 @@
 class Shape {
 protected:
     glm::vec3 center;
+    glm::vec3 color;
     std::vector<int>  indices;
     std::vector<float>  points;
     std::vector<float>  normals;
+    std::vector<float>  norm_and_point;
 public:
-    Shape (glm::vec3 center = glm::vec3(0, 0, 0)):center(center){}
+    Shape (glm::vec3 center = glm::vec3(0, 0, 0), glm::vec3 color = glm::vec3(1, 0.5, 0.2)):center(center), color(color){}
     virtual ~Shape (){}
     virtual void create_point() = 0;
     virtual void create_indices() = 0;
@@ -25,29 +27,17 @@ public:
     const std::vector<float> &get_points() const {return points;}
     const std::vector<float> &get_normals() const {return normals;}
 
-    // std::vector<float> rotate(const char axis, const float angle, std::vector<float> v) {
-    //     std::vector<float> res;
-    //     for (size_t i = 0; i < v.size()/3; i++) {
-    //         switch (axis) {
-    //             case 'x':{
-    //                 auto tmp = glm::rotateX(glm::vec3(v[3*i], v[3*i+1], v[3*i+2]), angle);
-    //                 res.insert(res.end(), glm::value_ptr(tmp), glm::value_ptr(tmp)+3);}
-    //                 break;
-    //             case 'y':{
-    //                 auto tmp = glm::rotateY(glm::vec3(v[3*i], v[3*i+1], v[3*i+2]), angle);
-    //                 res.insert(res.end(), glm::value_ptr(tmp), glm::value_ptr(tmp)+3);}
-    //                 break;
-    //             case 'z':{
-    //                 auto tmp = glm::rotateZ(glm::vec3(v[3*i], v[3*i+1], v[3*i+2]), angle);
-    //                 res.insert(res.end(), glm::value_ptr(tmp), glm::value_ptr(tmp)+3);}
-    //                 break;
-    //             default :{
-    //                 std::cout << "Incorrect input data!, must be x, y, or z!" << '\n';}
-    //                 break;
-    //         }
-    //     }
-    //     return res;
-    // }
+    void join_data() {
+        auto points_it = points.begin();
+        auto normals_it = normals.begin();
+        for (size_t i = 0; i < points.size()/3; i++) {
+            norm_and_point.insert(norm_and_point.end(), points_it, points_it+3);
+            norm_and_point.insert(norm_and_point.end(), normals_it, normals_it+3);
+            norm_and_point.insert(norm_and_point.end(), glm::value_ptr(color), glm::value_ptr(color)+3);
+            points_it+=3;
+            normals_it+=3;
+        }
+    }
 
     virtual void rotate(const char axis, const float angle) {
         for (auto it = points.begin(); it <= points.end()-3; it+=3) {

@@ -74,89 +74,89 @@ int main()
 
 
     // ------------------------------------------------------------------
-    Cylinder* cylinder_basis_1 = new Cylinder(glm::vec3(0,-1.3,0), 0.7, 0.2, 25); //c, r, h, s
+    Cylinder* cylinder_basis_1 = new Cylinder(0.7, 0.2, 25, glm::vec3(0,-1.3,0), glm::vec3(0.1,0.1,0.1)); //c, r, h, s
     cylinder_basis_1->create_normals();
     cylinder_basis_1->join_data();
-    Cylinder* cylinder_basis_2 = new Cylinder(glm::vec3(0,-1.1,0), 0.2, 0.2, 25);
+    Cylinder* cylinder_basis_2 = new Cylinder(0.2, 0.2, 25, glm::vec3(0,-1.1,0), glm::vec3(0.1,0.1,0.1));
     cylinder_basis_2->create_normals();
     cylinder_basis_2->join_data();
-    Torus*    torus_basis = new Torus(glm::vec3(0,0,0), 0.05, 15, 1.1, 36, true); //c, r, s1, R, s2, half
+    Torus*    torus_basis = new Torus(0.05, 15, 1.1, 36, glm::vec3(0,0,0), glm::vec3(1, 0.5, 0.2), true ); // r, s1, R, s2, cntr, clr, half
     torus_basis->rotate('x', glm::pi<float>());
     torus_basis->create_normals();
     torus_basis->join_data();
 
-    Torus*    torus_full_1 = new Torus(glm::vec3(0,0,0), 0.025, 15, 0.9, 36); //c, r, s1, R, s2, half
+    Torus*    torus_full_1 = new Torus(0.025, 15, 0.9, 36, glm::vec3(0.1,0.1,0.1));
     torus_full_1->create_normals();
     torus_full_1->join_data();
 
-    Cylinder* cylinder_basis_l = new Cylinder(glm::vec3(-1.1,0,0), 0.1, 0.2, 25);
+    Cylinder* cylinder_basis_l = new Cylinder(0.1, 0.2, 25, glm::vec3(-1.1,0,0));
     cylinder_basis_l->rotate('x', glm::pi<float>()/2);
     cylinder_basis_l->rotate('y', glm::pi<float>()/2);
     cylinder_basis_l->create_normals();
     cylinder_basis_l->join_data();
 
-    Cylinder* cylinder_basis_r = new Cylinder(glm::vec3(1.1,0,0),  0.1, 0.2, 25);
+    Cylinder* cylinder_basis_r = new Cylinder(0.1, 0.2, 25, glm::vec3(1.1,0,0));
     cylinder_basis_r->rotate('x', glm::pi<float>()/2);
     cylinder_basis_r->rotate('y', glm::pi<float>()/2);
     cylinder_basis_r->create_normals();
     cylinder_basis_r->join_data();
 
-    Cylinder* cylinder_rot_r = new Cylinder(glm::vec3(1.0,0,0), 0.025, 0.2, 25);
+    Cylinder* cylinder_rot_r = new Cylinder(0.025, 0.2, 25, glm::vec3(1.0,0,0));
     cylinder_rot_r->rotate('x', glm::pi<float>()/2);
     cylinder_rot_r->rotate('y', glm::pi<float>()/2);
     cylinder_rot_r->create_normals();
     cylinder_rot_r->join_data();
 
-    Cylinder* cylinder_rot_l = new Cylinder(glm::vec3(-1.0,0,0), 0.025, 0.2, 25);
+    Cylinder* cylinder_rot_l = new Cylinder(0.025, 0.2, 25, glm::vec3(-1.0,0,0));
     cylinder_rot_l->rotate('x', glm::pi<float>()/2);
     cylinder_rot_l->rotate('y', glm::pi<float>()/2);
     cylinder_rot_l->create_normals();
     cylinder_rot_l->join_data();
 
-    Torus*    torus_full_2_1 = new Torus(glm::vec3(0,0,0), 0.025, 15, 0.6, 36); //c, r, s1, R, s2, half
+    Torus*    torus_full_2_1 = new Torus(0.025, 15, 0.6, 36, glm::vec3(0,0,0)); //c, r, s1, R, s2, half
     torus_full_2_1->create_normals();
     torus_full_2_1->join_data();
 
-    Torus*    torus_full_2_2 = new Torus(glm::vec3(0,0,0), 0.025, 15, 0.6, 36); //c, r, s1, R, s2, half
+    Torus*    torus_full_2_2 = new Torus(0.025, 15, 0.6, 36, glm::vec3(0,0,0)); //c, r, s1, R, s2, half
     torus_full_2_2->rotate('x', glm::pi<float>()/4);
     torus_full_2_2->rotate('y', glm::pi<float>()/2);
     torus_full_2_2->create_normals();
     torus_full_2_2->join_data();
 
-    Sphere*   sphere_base = new Sphere(glm::vec3(0,0,0), 0.2, 32, 16);
+    Sphere*   sphere_base = new Sphere(0.2, 32, 16, glm::vec3(0,0,0));
     sphere_base->create_normals();
     sphere_base->join_data();
 
-    Cylinder* cylinder_rot_big = new Cylinder(glm::vec3(0.0,0,0), 0.02, 1.8, 25);
+    Cylinder* cylinder_rot_big = new Cylinder(0.02, 1.8, 25, glm::vec3(0.0,0,0));
     cylinder_rot_big->rotate('z', glm::pi<float>()/4);
     cylinder_rot_big->create_normals();
     cylinder_rot_big->join_data();
 
-    Cylinder* cylinder_rot_small = new Cylinder(glm::vec3(0.0,0,0), 0.02, 1.2, 25);
+    Cylinder* cylinder_rot_small = new Cylinder(0.02, 1.2, 25, glm::vec3(0.0,0,0));
     cylinder_rot_small->rotate('x', glm::pi<float>()/4);
     cylinder_rot_small->rotate('y', glm::pi<float>()/2);
     cylinder_rot_small->create_normals();
     cylinder_rot_small->join_data();
 
 
-    Sphere*   sphere_add_1 = new Sphere(glm::vec3(0,1,0), 0.1, 32, 16);
+    Sphere*   sphere_add_1 = new Sphere(0.1, 32, 16, glm::vec3(0,1,0), glm::vec3(0.1,0.1,0.1));
     sphere_add_1->create_normals();
     sphere_add_1->join_data();
 
-    Sphere*   sphere_add_2_1 = new Sphere(glm::vec3(0,0.6,0), 0.07, 32, 16);
+    Sphere*   sphere_add_2_1 = new Sphere(0.07, 32, 16, glm::vec3(0,0.6,0), glm::vec3(0.1,0.1,0.1));
     sphere_add_2_1->rotate('z', -glm::pi<float>()/4);
     sphere_add_2_1->create_normals();
     sphere_add_2_1->join_data();
 
-    Sphere*   sphere_add_2_2 = new Sphere(glm::vec3(0,-0.6,0), 0.07, 32, 16);
+    Sphere*   sphere_add_2_2 = new Sphere(0.07, 32, 16, glm::vec3(0,-0.6,0), glm::vec3(0.1,0.1,0.1));
     sphere_add_2_2->rotate('z', -glm::pi<float>()/4);
     sphere_add_2_2->create_normals();
     sphere_add_2_2->join_data();
 
 
-    Cylinder* c_test = new Cylinder(glm::vec3(0.0,0,0), 0.5, 0.2, 4);
-    c_test->create_normals();
-    c_test->join_data();
+    // Cylinder* c_test = new Cylinder(0.5, 0.2, 4, glm::vec3(0,0,0), glm::vec3(0,0,0) );
+    // c_test->create_normals();
+    // c_test->join_data();
 
     // std::cout << "Points" << '\n';
     // int k = 1;
@@ -174,20 +174,21 @@ int main()
     //         std::cout << '\n';
     //     j++;
     // }
-    std::cout << "Normals" << '\n';
-    int s = 1;
-    for (auto &el : c_test->get_normals()) {
-        std::cout << el << ' ';
-        if(s%3 == 0)
-            std::cout << '\n';
-        s++;
-    }
+    // std::cout << "Normals" << '\n';
+    // int s = 1;
+    // for (auto &el : c_test->get_n_p()) {
+    //     std::cout << el << ' ';
+    //     if(s%9 == 0)
+    //         std::cout << '\n';
+    //     s++;
+    // }
 
 
     Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
 
-    std::vector<std::vector<float>> arr_vb = { //c_test->get_n_p()
+    std::vector<std::vector<float>> arr_vb = {
+                                                // c_test->get_n_p()
                                                 cylinder_basis_1->get_n_p(),
                                                 cylinder_basis_2->get_n_p(),
                                                 torus_basis->get_n_p(),
@@ -206,7 +207,8 @@ int main()
                                                 sphere_add_2_2->get_n_p()
                                             };
 
-    std::vector<std::vector<int>>   arr_ib = { //c_test->get_indices()
+    std::vector<std::vector<int>>   arr_ib = {
+                                                // c_test->get_indices()
                                                 cylinder_basis_1->get_indices(),
                                                 cylinder_basis_2->get_indices(),
                                                 torus_basis->get_indices(),
@@ -244,11 +246,14 @@ int main()
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, arr_ib[i].size()*sizeof(int), arr_ib[i].data(), GL_STATIC_DRAW);
         // IndexBuffer ib(arr_ib[i].data(), arr_ib[i].size());
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0); //Points
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(sizeof(float)*3)); //Normals
         glEnableVertexAttribArray(1);
+
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(sizeof(float)*6)); //Colors
+        glEnableVertexAttribArray(2);
     }
 
 

@@ -15,10 +15,12 @@ private:
     // std::vector<int>  indices;
     // std::vector<float>  points;
     // std::vector<float>  normals;
-    std::vector<float>  norm_and_point;
+    // std::vector<float>  norm_and_point;
 
 public:
-    Sphere (glm::vec3 center, float radius, int sectors, int stack, bool movable=false);
+    Sphere (float radius, int sectors, int stack,
+            glm::vec3 center = glm::vec3(0, 0, 0),
+            glm::vec3 color = glm::vec3(1, 0.5, 0.2), bool movable=false);
     ~Sphere (){};
 
     // const std::vector<int> &get_indices() const {return indices;}
@@ -28,8 +30,8 @@ public:
     void create_indices();
     void create_point();
     void create_normals();
-    void join_data();
-    
+    // void join_data();
+
     void rotate(const char axis, const float angle);
 };
 
