@@ -158,22 +158,22 @@ int main()
     c_test->create_normals();
     c_test->join_data();
 
-    std::cout << "Points" << '\n';
-    int k = 1;
-    for (auto &el : c_test->get_points()) {
-        std::cout << el << ' ';
-        if(k%3 == 0)
-            std::cout << '\n';
-        k++;
-    }
-    std::cout << "Indices" << '\n';
-    int j = 1;
-    for (auto &el : c_test->get_indices()) {
-        std::cout << el << ' ';
-        if(j%3 == 0)
-            std::cout << '\n';
-        j++;
-    }
+    // std::cout << "Points" << '\n';
+    // int k = 1;
+    // for (auto &el : c_test->get_points()) {
+    //     std::cout << el << ' ';
+    //     if(k%3 == 0)
+    //         std::cout << '\n';
+    //     k++;
+    // }
+    // std::cout << "Indices" << '\n';
+    // int j = 1;
+    // for (auto &el : c_test->get_indices()) {
+    //     std::cout << el << ' ';
+    //     if(j%3 == 0)
+    //         std::cout << '\n';
+    //     j++;
+    // }
     std::cout << "Normals" << '\n';
     int s = 1;
     for (auto &el : c_test->get_normals()) {
@@ -272,11 +272,20 @@ int main()
 
         shader.SetMat4("projection", projection);
         shader.SetMat4("view", view);
+        glm::mat4 model = glm::mat4(1.0f);
+
         // shader.SetVec3("viewPos", camera.Position);
 
         // shader.Bind(); //????????????????????????????
         for (size_t i = 0; i < n; i++) {
             glBindVertexArray(VAO[i]);
+            if( i == 3 || i == 13 || i == 11){
+                model = glm::rotate(glm::mat4(1.0f), glm::sin(currentFrame), glm::vec3(1,0,0));
+                shader.SetMat4("model", model);
+            }else{
+                model = glm::mat4(1.0f);
+                shader.SetMat4("model", model);
+            }
             glDrawElements(GL_TRIANGLES, arr_ib[i].size(), GL_UNSIGNED_INT, 0);
         }
 
