@@ -154,29 +154,41 @@ int main()
     sphere_add_2_2->join_data();
 
 
+    Cylinder* c_test = new Cylinder(glm::vec3(0.0,0,0), 0.5, 0.2, 4);
+    c_test->create_normals();
+    c_test->join_data();
 
-    // std::cout << "Torus points" << '\n';
-    // int k = 1;
-    // for (auto &el : torus->get_points()) {
-    //     std::cout << el << ' ';
-    //     if(k%3 == 0)
-    //         std::cout << '\n';
-    //     k++;
-    // }
-    // std::cout << "Torus indices" << '\n';
-    // int j = 1;
-    // for (auto &el : torus->get_indices()) {
-    //     std::cout << el << ' ';
-    //     if(j%3 == 0)
-    //         std::cout << '\n';
-    //     j++;
-    // }
+    std::cout << "Points" << '\n';
+    int k = 1;
+    for (auto &el : c_test->get_points()) {
+        std::cout << el << ' ';
+        if(k%3 == 0)
+            std::cout << '\n';
+        k++;
+    }
+    std::cout << "Indices" << '\n';
+    int j = 1;
+    for (auto &el : c_test->get_indices()) {
+        std::cout << el << ' ';
+        if(j%3 == 0)
+            std::cout << '\n';
+        j++;
+    }
+    std::cout << "Normals" << '\n';
+    int s = 1;
+    for (auto &el : c_test->get_normals()) {
+        std::cout << el << ' ';
+        if(s%3 == 0)
+            std::cout << '\n';
+        s++;
+    }
 
 
     Shader shader("./src/shaders/Basic.glsl");
     shader.Bind();
 
-    std::vector<std::vector<float>> arr_vb = {cylinder_basis_1->get_n_p(),
+    std::vector<std::vector<float>> arr_vb = { //c_test->get_n_p()
+                                                cylinder_basis_1->get_n_p(),
                                                 cylinder_basis_2->get_n_p(),
                                                 torus_basis->get_n_p(),
                                                 torus_full_1->get_n_p(),
@@ -191,9 +203,11 @@ int main()
                                                 cylinder_rot_small->get_n_p(),
                                                 sphere_add_1->get_n_p(),
                                                 sphere_add_2_1->get_n_p(),
-                                                sphere_add_2_2->get_n_p()};
+                                                sphere_add_2_2->get_n_p()
+                                            };
 
-    std::vector<std::vector<int>>   arr_ib = {cylinder_basis_1->get_indices(),
+    std::vector<std::vector<int>>   arr_ib = { //c_test->get_indices()
+                                                cylinder_basis_1->get_indices(),
                                                 cylinder_basis_2->get_indices(),
                                                 torus_basis->get_indices(),
                                                 torus_full_1->get_indices(),
@@ -208,7 +222,8 @@ int main()
                                                 cylinder_rot_small->get_indices(),
                                                 sphere_add_1->get_indices(),
                                                 sphere_add_2_1->get_indices(),
-                                                sphere_add_2_2->get_indices()};
+                                                sphere_add_2_2->get_indices()
+                                            };
 
     const size_t n = arr_vb.size();
     std::cout << "size : " << n << '\n';
@@ -264,11 +279,6 @@ int main()
             glBindVertexArray(VAO[i]);
             glDrawElements(GL_TRIANGLES, arr_ib[i].size(), GL_UNSIGNED_INT, 0);
         }
-
-
-        // test_shader.Bind();
-        glBindVertexArray(tets_VAO);
-        glDrawElements(GL_TRIANGLES, sphere_test->get_indices().size(), GL_UNSIGNED_INT, 0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
