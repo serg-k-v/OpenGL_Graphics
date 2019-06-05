@@ -279,8 +279,14 @@ int main()
         // shader.Bind(); //????????????????????????????
         for (size_t i = 0; i < n; i++) {
             glBindVertexArray(VAO[i]);
-            if( i == 3 || i == 13 || i == 11){
+            if( i == 3 || i == 13 || i == 11 ){
                 model = glm::rotate(glm::mat4(1.0f), glm::sin(currentFrame), glm::vec3(1,0,0));
+                shader.SetMat4("model", model);
+            }else if( i == 9  || i == 8 || i == 14 || i == 15 || i == 12){
+                model = glm::rotate(glm::mat4(1.0f), glm::sin(currentFrame), glm::vec3(1,0,0));
+                //rotate coord sys at 45 degree -  I DON'T KNOW HOW DO IT
+                //for save reality phisics
+                model = glm::rotate(model, glm::cos(currentFrame), glm::vec3(0,1,0));
                 shader.SetMat4("model", model);
             }else{
                 model = glm::mat4(1.0f);
